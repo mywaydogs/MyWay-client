@@ -1,0 +1,71 @@
+@startuml
+
+entity user {
+    email
+    password
+    first name
+    last name
+}
+
+entity project {
+    name
+}
+
+entity template {
+    name
+}
+
+entity template_task {
+    name
+    description
+}
+
+entity template_label {
+    name
+    color
+}
+
+entity customer {
+    first name
+    last name
+}
+
+entity task {
+    name
+    description
+    deadline
+}
+
+entity label {
+    name
+    colo
+}
+
+entity note {
+    creation time
+    description
+    pictures
+    audio records
+    videos
+}
+
+user ||--o{ customer : customers of
+customer ||--o{ project : has
+
+task "subtask" }o--|| "task" task : subtask of
+label }o--o{ task : has
+
+label }o--|| project : project labels
+
+project ||--o{ note : project notes
+note }o--o{ task : can relate to
+
+project ||--o{ task : consists of
+
+template }o--|| user : created by
+template }o--o{ user : user templates
+template ||--o{ template_task : consists of
+template ||--o{ template_label
+template_label }o--o{ template_task
+
+@enduml
