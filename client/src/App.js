@@ -12,7 +12,7 @@ import {
   Switch, Route
 } from 'react-router-dom';
 import Home from './components/Home';
-import Project from './components/Project';
+import Project from './components/Project/';
 import Button from './components/utils/Button';
 import UserContext from './components/UserContext';
 import withAuth from './components/utils/WithAuth';

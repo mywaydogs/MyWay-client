@@ -27,12 +27,13 @@ const userSchema = mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 const customerSchema = mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    firstName: String,
-    lastName: String,
-    email: String,
-    phone: String,
-    address: String
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    address: { type: String, required: true },
+    createdAt: {type: Date, required: true}
 })
 
 const Customer = mongoose.model('Customer', customerSchema);
@@ -40,7 +41,7 @@ const Customer = mongoose.model('Customer', customerSchema);
 const projectSchema = mongoose.Schema({
     name: String,
     customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
-    dog: {
+    preliminaryDiagnosis: {
         diagnosis: String,
         accessories: String,
         environmentalManagement: String,
@@ -131,7 +132,8 @@ app.get('/initdb', function (req, res) {
                     lastName: 'גורה',
                     email: 'simha@gora.com',
                     phone: '0501231234',
-                    address: 'זהירות בדרכים 34/5, חגור'
+                    address: 'זהירות בדרכים 34/5, חגור',
+                    createdAt: new Date(2020, 8, 5)
                 }
             ].map(customer => ({ ...customer, user: user._id })));
         })
@@ -140,7 +142,7 @@ app.get('/initdb', function (req, res) {
                 {
                     customer: customers[0]._id,
                     name: 'מאווי',
-                    dog: {
+                    preliminaryDiagnosis: {
                         diagnosis: 'כלב מפלצת',
                         accessories: 'בובות מפוחלצות של סנאים',
                         environmentalManagement: 'גדר שיותר גבוהה ממה שהוא יכול לקפוץ',
@@ -194,7 +196,7 @@ app.get('/api/customers', function (req, res) {
 });
 
 app.post('/api/customers', function (req, res) {
-    Customer.create({ user: req.user._id, ...req.body })
+    Customer.create({ user: req.user._id, createdAt: new Date(), ...req.body })
         .then(doc => res.sendStatus(200));
 })
 

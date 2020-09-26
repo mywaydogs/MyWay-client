@@ -5,6 +5,8 @@ import Loading from "./Loading";
 import Collapsible from "react-collapsible";
 import { Link } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
+import Button from './utils/Button';
+import TextInput from './utils/TextInput';
 
 const customerModal = (
     isOpen,
@@ -38,64 +40,52 @@ const customerModal = (
         <Modal isOpen={isOpen} onRequestClose={() => setIsOpen(false)}>
             <h2>{title}</h2>
             <form onSubmit={modalHandleSubmit}>
-                <div>
-                    <label>שם פרטי</label>
-                    <input
-                        name="firstName"
-                        value={customer.firstName}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label>שם משפחה</label>
-                    <input
-                        name="lastName"
-                        value={customer.lastName}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label>מייל</label>
-                    <input
-                        name="email"
-                        value={customer.email}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label>טלפון</label>
-                    <input
-                        name="phone"
-                        value={customer.phone}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <label>כתובת</label>
-                    <input
-                        name="address"
-                        value={customer.address}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div>
-                    <input type="submit" value={submitBtnValue} />
-                    <input
-                        type="reset"
-                        value="נקה טופס"
-                        onClick={() =>
-                            setCustomer(
-                                Object.keys(customer).reduce(
-                                    (acc, e) => Object.assign(acc, { [e]: "" }),
-                                    {}
-                                )
+                <TextInput
+                    label="שם פרטי"
+                    name="firstName"
+                    value={customer.firstName}
+                    onChange={handleInputChange}
+                />
+                <TextInput
+                    label="שם משפחה"
+                    name="lastName"
+                    value={customer.lastName}
+                    onChange={handleInputChange}
+                />
+                <TextInput
+                    label="מייל"
+                    name="email"
+                    value={customer.email}
+                    onChange={handleInputChange}
+                />
+                <TextInput
+                    label="טלפון"
+                    name="phone"
+                    value={customer.phone}
+                    onChange={handleInputChange}
+                />
+                <TextInput
+                    label="כתובת"
+                    name="address"
+                    value={customer.address}
+                    onChange={handleInputChange}
+                />
+                <Button type="submit" value={submitBtnValue} />
+                <Button
+                    type="reset"
+                    value="נקה טופס"
+                    onClick={() =>
+                        setCustomer(
+                            Object.keys(customer).reduce(
+                                (acc, e) => Object.assign(acc, { [e]: "" }),
+                                {}
                             )
-                        }
-                    />
-                    <input type="reset" value="חזור" onClick={() => setIsOpen(false)} />
-                </div>
+                        )
+                    }
+                />
+                <Button value="חזור" onClick={() => setIsOpen(false)} />
             </form>
-        </Modal>
+        </Modal >
     );
 };
 
@@ -107,6 +97,44 @@ function Customer({
     setEditCustomerModalIsOpen,
     ...props
 }) {
+
+    const handleOnClickEdit = () => {
+        setEditCustomerModalIsOpen(true);
+        setEditCustomer(customer);
+    }
+
+    const handleOnClickDelete = () => {
+        confirmAlert({
+            customUI: ({ onClose }) => (
+                <>
+                    <h2>מחיקת לקוח</h2>
+                    <p>
+                        האם אתה בטוח שברצונך למחוק את הלקוח? פעולה זו הינה בלתי
+                        הפיכה, וכל הנתונים שלו יחד עם הפרויקטים שלו יימחקו
+                        לצמיתות.
+                    </p>
+                    <Button
+                        value="כן"
+                        onClick={() => {
+                            axios
+                                .delete(`/api/customers/${customer._id}`)
+                                .then(() => {
+                                    fetchCustomers();
+                                    onClose();
+                                });
+                        }}
+                    />
+                    <Button
+                        value="לא"
+                        onClick={() => {
+                            onClose();
+                        }}
+                    />
+                </>
+            ),
+        });
+    }
+
     return (
         <Collapsible
             key={idx}
@@ -117,50 +145,15 @@ function Customer({
                     {customer.email}
                     {customer.phone}
                     {customer.address}
-                    <input
-                        type="button"
+                    <Button
+                        size="small"
                         value="ערוך"
-                        onClick={() => {
-                            setEditCustomerModalIsOpen(true);
-                            setEditCustomer(customer);
-                        }}
+                        onClick={handleOnClickEdit}
                     />
-                    <input
-                        type="button"
+                    <Button
+                        size="small"
                         value="מחק"
-                        onClick={() => {
-                            confirmAlert({
-                                customUI: ({ onClose }) => (
-                                    <>
-                                        <h2>מחיקת לקוח</h2>
-                                        <p>
-                                            האם אתה בטוח שברצונך למחוק את הלקוח? פעולה זו הינה בלתי
-                                            הפיכה, וכל הנתונים שלו יחד עם הפרויקטים שלו יימחקו
-                                            לצמיתות.
-                                        </p>
-                                        <input
-                                            type="button"
-                                            value="כן"
-                                            onClick={() => {
-                                                axios
-                                                    .delete(`/api/customers/${customer._id}`)
-                                                    .then(() => {
-                                                        fetchCustomers();
-                                                        onClose();
-                                                    });
-                                            }}
-                                        />
-                                        <input
-                                            type="button"
-                                            value="לא"
-                                            onClick={() => {
-                                                onClose();
-                                            }}
-                                        />
-                                    </>
-                                ),
-                            });
-                        }}
+                        onClick={handleOnClickDelete}
                     />
                 </>
             }
@@ -240,8 +233,7 @@ function Customers() {
         return (
             <>
                 <div>
-                    <input
-                        type="button"
+                    <Button
                         value="לקוח חדש"
                         onClick={() => setNewCustomerModalIsOpen(true)}
                     />
