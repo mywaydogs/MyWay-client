@@ -1,31 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FullCalendar, { flexibleCompare } from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import heLocale from "@fullcalendar/core/locales/he";
-
-function Calendar({ goals }) {
-  return (
-    <>
-      <FullCalendar
-        plugins={[dayGridPlugin, listPlugin]}
-        headerToolbar={{ center: "dayGridMonth,listWeek" }}
-        initialView="dayGridMonth"
-        locale={heLocale}
-        defaultAllDay={true}
-        handleWindowResize={true}
-        events={goals
-          .filter((goal) => goal.showOnCalendar)
-          .map((goal) => ({
-            title: goal.title,
-            start: goal.startTime,
-            end: goal.endTime,
-          }))}
-      />
-    </>
-  );
-}
+import GoalsTimelineChart from "./GoalsTimelineChart";
+import update from "immutability-helper";
 
 function GoalView({ goal }) {
   if (!goal) {
@@ -46,14 +26,26 @@ function GoalView({ goal }) {
   );
 }
 
-function WorkPlan({ goals }) {
+function WorkPlan({ goals: data }) {
   const [chosenGoal, setChosenGoal] = useState(null);
+  const [goals, setGoals] = useState([]);
+
+  useEffect(() => {
+    setGoals(data.map((goal) => ({ ...goal, showOnChart: true })));
+  }, [data]);
+
+  const toggleShowOnChart = (goal) => {
+    setGoals(
+      update(goals, {
+        [goals.findIndex((g) => g._id === goal._id)]: {
+          showOnChart: { $apply: (x) => !x },
+        },
+      })
+    );
+  };
 
   return (
-    <div style={{ display: "flex", flexDirection: "row" }}>
-      <div style={{ width: "40vw" }}>
-        <Calendar goals={goals} />
-      </div>
+    <div style={{ display: "flex", flexDirection: "column" }}>
       <div>
         <h2>מטרות</h2>
         מיין לפי:
@@ -64,22 +56,22 @@ function WorkPlan({ goals }) {
         </select>
         <ul style={{ listStyleType: "none" }}>
           {goals.map((goal, idx) => (
-            <li
-              key={`${idx}`}
-              style={{ margin: "10px auto", border: "1px solid black" }}
-              onMouseDownCapture={() => setChosenGoal(goal)}
-            >
-              <input
-                type="checkbox"
-                checked={goal.showOnCalendar}
-                onChange={() => {}}
-              />
-              <label>{goal.title}</label>
+            <li key={`${idx}`}>
+              <div>
+                <input
+                  type="checkbox"
+                  checked={goal.showOnChart}
+                  onChange={() => toggleShowOnChart(goal)}
+                />
+                <label>{goal.title}</label>
+              </div>
             </li>
           ))}
         </ul>
       </div>
-      <GoalView goal={chosenGoal} />
+      <div style={{ width: "60%" }}>
+        <GoalsTimelineChart goals={goals.filter((goal) => goal.showOnChart)} />
+      </div>
     </div>
   );
 }

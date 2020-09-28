@@ -12,15 +12,7 @@ function Project(props) {
   const projectReducer = (state, { type, data }) => {
     switch (type) {
       case "INIT_PROJECT":
-        return {
-          ...data,
-          goals: data.goals.map((goal) => ({ ...goal, showOnCalendar: false })),
-        };
-      case "TOOGLE_SHOW_CALENDAR":
-        let goalIndex = state.goals.findIndex((goal) => goal === data);
-        return update(state, {
-          goals: { [goalIndex]: { showOnCalendar: { $apply: (x) => !x } } },
-        });
+        return data;
       case "CHANGE_PRELIMINARY_DIAGNOSIS":
         return update(state, {
           preliminaryDiagnosis: {
