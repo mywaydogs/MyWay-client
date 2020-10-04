@@ -135,6 +135,7 @@ function Customers() {
               <th>מייל</th>
               <th>טלפון</th>
               <th>כתובת</th>
+              <th>תאריך הוספה</th>
               <th>פרוייקטים</th>
               <th>פעולות</th>
             </tr>
@@ -147,6 +148,9 @@ function Customers() {
                 <td>{customer.email}</td>
                 <td>{customer.phone}</td>
                 <td>{customer.address}</td>
+                <td>
+                  {new Date(customer.createdAt).toLocaleDateString("he-IL")}
+                </td>
                 <td>
                   <Button
                     value="פרוייקטים"

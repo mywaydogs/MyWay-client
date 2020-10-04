@@ -278,7 +278,7 @@ app.get("/api/customers", function (req, res) {
       as: "projects",
     })
     .project(
-      "_id firstName lastName email phone address projects._id projects.name"
+      "_id firstName lastName email phone address createdAt projects._id projects.name"
     )
     .then((customers) => res.json(customers));
 });
