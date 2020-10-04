@@ -1,46 +1,48 @@
 import React from "react";
+import Button from "../utils/Button";
+import update from "immutability-helper";
 
-function PreliminaryDiagnosis({
-  data: preliminaryDiagnosis,
-  handleInputChange,
-  handleSubmit,
-}) {
+function PreliminaryDiagnosis({ data, onChange, onSubmit }) {
+  const handleOnChange = (e) => {
+    onChange(update(data, { [e.target.name]: { $set: e.target.value } }));
+  };
+
   return (
-    <>
+    <form onSubmit={onSubmit}>
       <div>
         <h3>אבחון הכלב</h3>
         <textarea
           name="diagnosis"
-          value={preliminaryDiagnosis.diagnosis}
-          onChange={handleInputChange}
+          value={data.diagnosis}
+          onChange={handleOnChange}
         ></textarea>
       </div>
       <div>
         <h3>בחירת עזרים</h3>
         <textarea
           name="accessories"
-          value={preliminaryDiagnosis.accessories}
-          onChange={handleInputChange}
+          value={data.accessories}
+          onChange={handleOnChange}
         ></textarea>
       </div>
       <div>
         <h3>ניהול סביבתי</h3>
         <textarea
           name="environmentalManagement"
-          value={preliminaryDiagnosis.environmentalManagement}
-          onChange={handleInputChange}
+          value={data.environmentalManagement}
+          onChange={handleOnChange}
         ></textarea>
       </div>
       <div>
         <h3>סיכום</h3>
         <textarea
           name="summary"
-          value={preliminaryDiagnosis.summary}
-          onChange={handleInputChange}
+          value={data.summary}
+          onChange={handleOnChange}
         ></textarea>
       </div>
-      <input type="button" value="שמור" onClick={handleSubmit} />
-    </>
+      <Button type="submit" value="שמירה" />
+    </form>
   );
 }
 

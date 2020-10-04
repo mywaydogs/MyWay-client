@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import Loading from "../Loading";
+import React, { useCallback, useEffect, useRef } from "react";
 import * as d3 from "d3";
 import ColorScheme from "color-scheme";
 
@@ -18,6 +17,10 @@ function* colors() {
   }
 }
 
+function getNbWeeks(endDate, startDate) {
+  return (endDate - startDate) / (1000 * 60 * 60 * 24 * 7);
+}
+
 function GoalsTimelineChart({ goals }) {
   const ref = useRef();
 
@@ -28,27 +31,24 @@ function GoalsTimelineChart({ goals }) {
   const paddingY = height * 0.1;
 
   useEffect(() => {
-    const svg = d3
-      .select(ref.current)
+    d3.select(ref.current)
       .attr("width", "100%")
       .attr("height", "100%")
       .attr("viewBox", `0 0 ${width} ${height}`);
   }, []);
 
-  useEffect(() => {
-    draw();
-  }, [goals]);
-
-  const draw = () => {
+  const draw = useCallback(() => {
     const svg = d3.select(ref.current);
     svg.selectAll("*").remove();
 
     const colorGen = colors();
 
-    const coloredGoals = goals.map((goal) => ({
-      ...goal,
-      color: colorGen.next().value,
-    }));
+    const coloredGoals = goals
+      .filter((goal) => goal.tasks.length !== 0)
+      .map((goal) => ({
+        ...goal,
+        color: colorGen.next().value,
+      }));
 
     const tasks = coloredGoals
       .map((goal) => goal.tasks.map((task) => ({ ...task, color: goal.color })))
@@ -62,18 +62,20 @@ function GoalsTimelineChart({ goals }) {
       return;
     }
 
-    const minStartTime = d3.min(
-      tasks.map((task) => new Date(task.startTime)).concat(new Date())
-    );
-    const maxEndTime = d3.max(
-      tasks.map((task) => new Date(task.endTime)).concat(new Date())
-    );
+    const minStartTime = d3.min(tasks.map((task) => new Date(task.startTime)));
+    const maxEndTime = d3.max(tasks.map((task) => new Date(task.endTime)));
 
     const startTime = new Date(
-      minStartTime.getTime() - minStartTime.getDay() * 1000 * 60 * 60 * 24
+      minStartTime.getTime() //- minStartTime.getDay() * 1000 * 60 * 60 * 24
     );
     const endTime = new Date(
-      maxEndTime.getTime() + (7 - maxEndTime.getDay()) * 1000 * 60 * 60 * 24
+      minStartTime.getTime() +
+        Math.ceil(getNbWeeks(maxEndTime, minStartTime)) *
+          1000 *
+          60 *
+          60 *
+          24 *
+          7
     );
 
     const xScale = d3
@@ -87,16 +89,21 @@ function GoalsTimelineChart({ goals }) {
     const yScale = d3
       .scaleLinear()
       .domain([0, tasks.length - 1])
-      .range([height - paddingY, taskHeight + 2 * taskPadding]);
+      .range([taskHeight + 2 * taskPadding, height - paddingY]);
 
-    const nbWeeks = Math.ceil(
-      (endTime - startTime) / (1000 * 60 * 60 * 24 * 7)
-    );
+    const nbWeeks = Math.ceil(getNbWeeks(endTime, startTime));
+
+    let tickValues = [];
+    for (let i = 0; i <= nbWeeks; i++) {
+      tickValues.push(
+        new Date(startTime.getTime() + i * 7 * 24 * 60 * 60 * 1000)
+      );
+    }
 
     const xAxis = d3
       .axisBottom()
       .scale(xScale)
-      .ticks(nbWeeks)
+      .tickValues(tickValues)
       .tickFormat((val, i) => `${i + 1}`);
 
     svg
@@ -115,7 +122,10 @@ function GoalsTimelineChart({ goals }) {
         coloredGoals.reduce(
           (acc, goal) => ({
             nbPrevTasks: acc.nbPrevTasks + goal.tasks.length,
-            goals: acc.goals.concat({ ...goal, nbPrevTasks: acc.nbPrevTasks }),
+            goals: acc.goals.concat({
+              ...goal,
+              nbPrevTasks: acc.nbPrevTasks,
+            }),
           }),
           { nbPrevTasks: 0, goals: [] }
         ).goals
@@ -125,13 +135,15 @@ function GoalsTimelineChart({ goals }) {
       .attr(
         "transform",
         (goal) =>
-          `translate(${0.09 * width}, ${
+          `translate(${paddingX * 0.9}, ${
+            -2 * taskPadding -
+            taskHeight +
             (yScale(goal.nbPrevTasks) +
               yScale(goal.nbPrevTasks + goal.tasks.length)) /
-            2
+              2
           })`
       )
-      .attr("dy", "0.5rem")
+      // .attr("dy", "0.5rem")
       .style("font-size", "0.8rem")
       .text((goal) => goal.title);
 
@@ -155,15 +167,17 @@ function GoalsTimelineChart({ goals }) {
       )
       .style("fill", (task) => task.color);
 
-    svg
-      .append("line")
-      .attr("id", "today-cursor")
-      .attr("x1", xScale(new Date()))
-      .attr("x2", xScale(new Date()))
-      .attr("y1", 0)
-      .attr("y2", yScale(0))
-      .style("stroke-width", 2)
-      .style("stroke", "#000");
+    if (startTime <= new Date() && new Date() <= endTime) {
+      svg
+        .append("line")
+        .attr("id", "today-cursor")
+        .attr("x1", xScale(new Date()))
+        .attr("x2", xScale(new Date()))
+        .attr("y1", height - paddingY)
+        .attr("y2", 0)
+        .style("stroke-width", 2)
+        .style("stroke", "#000");
+    }
 
     // make the today-cursor to be dragable
     // svg.select("#today-cursor").call(
@@ -173,7 +187,11 @@ function GoalsTimelineChart({ goals }) {
     //     }
     //   })
     // );
-  };
+  }, [goals, paddingX, paddingY]);
+
+  useEffect(() => {
+    draw();
+  }, [goals, draw]);
 
   return <svg ref={ref}></svg>;
 }

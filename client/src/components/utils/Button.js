@@ -6,12 +6,13 @@ const StyledButton = styled.button`
   outline: none;
   background-color: #333;
   border: 0px;
+  margin: 5px 5px;
   padding: ${(props) =>
     props.size === "small"
-      ? "7px 20px"
+      ? "4px 15px"
       : props.size === "medium"
-      ? "10px 40px"
-      : "15px 50px"};
+      ? "7px 20px"
+      : "10px 40px"};
   color: white;
   border-radius: 10px;
   font-size: ${(props) =>

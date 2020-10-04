@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
 const cors = require("cors");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
@@ -46,31 +47,37 @@ const projectSchema = mongoose.Schema({
   name: String,
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
   preliminaryDiagnosis: {
-    diagnosis: String,
-    accessories: String,
-    environmentalManagement: String,
-    summary: String,
+    diagnosis: { type: String, default: "" },
+    accessories: { type: String, default: "" },
+    environmentalManagement: { type: String, default: "" },
+    summary: { type: String, default: "" },
   },
-  notes: [
-    {
-      creationTime: Date,
-      description: String,
-    },
-  ],
-  goals: [
-    {
-      title: String,
-      description: String,
-      tasks: [
-        {
-          title: String,
-          completed: Boolean,
-          startTime: Date,
-          endTime: Date,
-        },
-      ],
-    },
-  ],
+  notes: {
+    type: [
+      {
+        creationTime: { type: Date },
+        description: { type: String },
+      },
+    ],
+    default: [],
+  },
+  goals: {
+    type: [
+      {
+        title: { type: String },
+        description: { type: String },
+        tasks: [
+          {
+            title: { type: String },
+            completed: { type: Boolean },
+            startTime: { type: Date },
+            endTime: { type: Date },
+          },
+        ],
+      },
+    ],
+    default: [],
+  },
 });
 
 const Project = mongoose.model("Project", projectSchema);
@@ -119,6 +126,7 @@ var sess = {
 //     sess.cookie.secure = true;
 // }
 
+app.use(express.static(path.join(__dirname, "../client/build")));
 app.use(cors());
 app.use(session(sess));
 app.use(bodyParser.json());
@@ -258,6 +266,9 @@ app.get("/initdb", function (req, res) {
 });
 
 app.get("/api/customers", function (req, res) {
+  if (!req.user) {
+    return res.sendStatus(401);
+  }
   Customer.aggregate()
     .match({ user: req.user._id })
     .lookup({
@@ -287,7 +298,9 @@ app.put("/api/customers/:id", function (req, res) {
 });
 
 app.delete("/api/customers/:id", function (req, res) {
-  Customer.findByIdAndDelete(req.params.id).then((doc) => res.sendStatus(200));
+  Customer.findByIdAndDelete(req.params.id)
+    .then((customer) => Project.deleteMany({ customer: customer._id }))
+    .then((err) => res.sendStatus(200));
 });
 
 app.get("/api/projects/:id", function (req, res) {
@@ -297,7 +310,9 @@ app.get("/api/projects/:id", function (req, res) {
 });
 
 app.post("/api/projects", function (req, res) {
-  Project.create(...req.body).then((doc) => res.sendStatus(200));
+  Project.create(req.body).then((doc) =>
+    res.status(201).set("Location", `/api/projects/${doc._id}`).end()
+  );
 });
 
 app.put("/api/projects/:id", function (req, res) {

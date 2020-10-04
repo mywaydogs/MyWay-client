@@ -1,49 +1,41 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import Collapsible from "react-collapsible";
 import { useParams } from "react-router-dom";
 import Loading from "../Loading";
 import PreliminaryDiagnosis from "./PreliminaryDiagnosis";
 import update from "immutability-helper";
-import CustomerDetails from "./CustomerDetails";
 import WorkPlan from "./WorkPlan";
 
 function Project(props) {
-  const projectReducer = (state, { type, data }) => {
-    switch (type) {
-      case "INIT_PROJECT":
-        return data;
-      case "CHANGE_PRELIMINARY_DIAGNOSIS":
-        return update(state, {
-          preliminaryDiagnosis: {
-            [data.name]: { $set: data.value },
-          },
-        });
-      default:
-        return state;
-    }
-  };
-  const [project, dispatch] = useReducer(projectReducer, null);
   const { id } = useParams();
+  const [project, setProject] = useState(null);
 
-  useEffect(() => {
+  const fetchProject = useCallback(() => {
     axios.get(`/api/projects/${id}`).then((res) => {
-      dispatch({ type: "INIT_PROJECT", data: res.data });
+      setProject(res.data);
     });
   }, [id]);
 
-  const handleProjectUpdate = (e) => {
-    axios.put(`/api/projects/${id}`, project);
+  useEffect(() => {
+    fetchProject();
+  }, [id, fetchProject]);
+
+  const updateProject = (project) => {
+    axios.put(`/api/projects/${id}`, project).then(fetchProject);
   };
 
-  const handlePreliminaryDiagnosisInputChange = (e) => {
-    dispatch({
-      type: "CHANGE_PRELIMINARY_DIAGNOSIS",
-      data: {
-        name: e.target.name,
-        value: e.target.value,
-      },
-    });
+  const onPrelminaryDiagnosisChange = (val) => {
+    setProject(update(project, { preliminaryDiagnosis: { $set: val } }));
+  };
+
+  const onPrelminaryDiagnosisSubmit = (e) => {
+    e.preventDefault();
+    updateProject(project);
+  };
+
+  const onWorkPlanSubmit = (val) => {
+    updateProject(update(project, { goals: { $set: val } }));
   };
 
   if (!project) {
@@ -51,30 +43,19 @@ function Project(props) {
   }
   return (
     <>
-      <div>
-        <h1>תיק אילוף - {project.name}</h1>
-        <Collapsible
-          trigger={
-            <h2>
-              פרטי לקוח - {project.customer.firstName}{" "}
-              {project.customer.lastName}
-            </h2>
-          }
-        >
-          <CustomerDetails customer={project.customer} />
-        </Collapsible>
-      </div>
-      <div>
-        <Collapsible trigger={<h2>אבחון ראשוני</h2>}>
-          <PreliminaryDiagnosis
-            data={project.preliminaryDiagnosis}
-            handleInputChange={handlePreliminaryDiagnosisInputChange}
-            handleSubmit={handleProjectUpdate}
-          />
-        </Collapsible>
-      </div>
+      <h1>תיק אילוף - {project.name}</h1>
+      <h2>
+        לקוח - {project.customer.firstName} {project.customer.lastName}
+      </h2>
+      <Collapsible trigger={<h2>אבחון ראשוני</h2>}>
+        <PreliminaryDiagnosis
+          data={project.preliminaryDiagnosis}
+          onChange={onPrelminaryDiagnosisChange}
+          onSubmit={onPrelminaryDiagnosisSubmit}
+        />
+      </Collapsible>
       <Collapsible trigger={<h2>תכנית עבודה</h2>} open={true}>
-        <WorkPlan goals={project.goals} />
+        <WorkPlan data={project.goals} onSubmit={onWorkPlanSubmit} />
       </Collapsible>
     </>
   );

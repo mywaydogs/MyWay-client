@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.scss';
-import Customers from './components/Customers';
+import Customers from './components/Customers/';
 import Login from './components/Login';
 import Register from './components/Register';
 import Layout from './components/Layout';
