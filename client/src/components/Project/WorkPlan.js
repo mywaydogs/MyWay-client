@@ -159,7 +159,7 @@ function WorkPlan({ data, onSubmit }) {
         <Button value="יצירת מטרה חדשה" onClick={showCreateModal} />
       </div>
       <div style={{ width: "60%" }}>
-        <GoalsTimelineChart goals={goals.filter((goal) => goal.showOnChart)} />
+        <GoalsTimelineChart goals={goals} />
       </div>
       <GoalModal
         data={createModal}

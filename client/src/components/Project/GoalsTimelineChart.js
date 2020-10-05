@@ -44,6 +44,7 @@ function GoalsTimelineChart({ goals }) {
     const colorGen = colors();
 
     const coloredGoals = goals
+      .filter((goal) => goal.showOnChart)
       .filter((goal) => goal.tasks.length !== 0)
       .map((goal) => ({
         ...goal,
@@ -62,8 +63,16 @@ function GoalsTimelineChart({ goals }) {
       return;
     }
 
-    const minStartTime = d3.min(tasks.map((task) => new Date(task.startTime)));
-    const maxEndTime = d3.max(tasks.map((task) => new Date(task.endTime)));
+    const unfilteredTasks = goals.reduce(
+      (acc, goal) => acc.concat(goal.tasks),
+      []
+    );
+    const minStartTime = d3.min(
+      unfilteredTasks.map((task) => new Date(task.startTime))
+    );
+    const maxEndTime = d3.max(
+      unfilteredTasks.map((task) => new Date(task.endTime))
+    );
 
     const startTime = new Date(
       minStartTime.getTime() //- minStartTime.getDay() * 1000 * 60 * 60 * 24
