@@ -70,8 +70,10 @@ function GoalsTimelineChart({ goals }) {
     const minStartTime = d3.min(
       unfilteredTasks.map((task) => new Date(task.startTime))
     );
+
+    // The end time will be calculated according to the last task that shows up on the graph.
     const maxEndTime = d3.max(
-      unfilteredTasks.map((task) => new Date(task.endTime))
+      tasks.map((task) => new Date(task.endTime))
     );
 
     const startTime = new Date(
