@@ -2,12 +2,15 @@ const mongoose = require("mongoose");
 const config = require("../config");
 
 module.exports = async () => {
-  const connection = await mongoose.connect(config.databaseURL, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useCreateIndex: true,
-  });
-
+  try {
+    const connection = await mongoose.connect(config.databaseURL, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+      useCreateIndex: true,
+    });
+  } catch (err) {
+    console.error(err);
+  }
   const db = mongoose.connection;
 
   db.on("error", console.error.bind(console, "connection error:"));
