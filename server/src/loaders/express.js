@@ -1,4 +1,5 @@
 const express = require("express");
+const config = require("../config");
 const path = require("path");
 const cors = require("cors");
 const session = require("express-session");
@@ -51,7 +52,7 @@ module.exports = async ({ app }) => {
   });
 
   var sess = {
-    secret: process.env.SESSION_SECRET || "mysecret",
+    secret: config.sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {},
@@ -62,7 +63,7 @@ module.exports = async ({ app }) => {
   //     sess.cookie.secure = true;
   // }
 
-  app.use(express.static(path.join(__dirname, "../client/build")));
+  app.use(express.static(path.join(__dirname, '../../../client/build')));
   app.use(cors());
   app.use(session(sess));
   app.use(bodyParser.json());

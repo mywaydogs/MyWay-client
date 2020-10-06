@@ -10,4 +10,5 @@ if (envFound.error) {
 module.exports = {
   port: parseInt(process.env.PORT, 10),
   databaseURL: process.env.MONGODB_URI,
+  sessionSecret: process.env.SESSION_SECRET
 };
