@@ -63,13 +63,16 @@ module.exports = async ({ app }) => {
   //     sess.cookie.secure = true;
   // }
 
-  app.use(express.static(path.join(__dirname, '../../../client/build')));
   app.use(cors());
   app.use(session(sess));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(passport.initialize());
   app.use(passport.session());
-
   app.use("/api", routes());
+  app.use(express.static(path.join(__dirname, "../../../client/build")));
+  app.use(express.static(path.join(__dirname, "../../../client/public")));
+  app.use((req, res, next) => {
+    res.sendFile(path.join(__dirname, "../../../client/build/index.html"));
+  });
 };
