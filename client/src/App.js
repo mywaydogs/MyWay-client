@@ -21,7 +21,7 @@ import withAuth from './components/utils/WithAuth';
 Modal.setAppElement(document.getElementById('root'));
 
 function InitDB() {
-  return <Button value="אפס" onClick={() => axios.get('/initdb')} />
+  return <Button value="אפס" onClick={() => axios.get('/api/initdb')} />
 }
 
 function App() {
