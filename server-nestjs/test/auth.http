@@ -1,0 +1,12 @@
+POST http://localhost:3000/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "kfir",
+    "password": "123"
+}
+
+###
+
+GET http://localhost:3000/profile HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtmaXIiLCJpYXQiOjE2MjYxMTk2NzQsImV4cCI6MTYyNjEyMzI3NH0.ZVN_wsLChtGV6IVNuEaD2zSn0fQpCm_aYR8h-VsLi04
