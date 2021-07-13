@@ -25,6 +25,6 @@ export class UsersService {
   }
 
   async findOne(findOneUserDto: FindOneUserDto): Promise<User | undefined> {
-    return this.userModel.findOne(findOneUserDto).exec();
+    return this.userModel.findOne(findOneUserDto).lean();
   }
 }

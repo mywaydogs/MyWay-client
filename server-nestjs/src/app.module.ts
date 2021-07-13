@@ -10,7 +10,10 @@ import { UsersModule } from './users/users.module';
   imports: [
     UsersModule,
     AuthModule,
-    MongooseModule.forRoot('mongodb://localhost:3333/MyWay'),
+    MongooseModule.forRoot('mongodb://localhost:3333/MyWay', {
+      // set because of a warning: collection.ensureIndex is deprecated. Use createIndexes instead
+      useCreateIndex: true,
+    }),
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],
