@@ -1,25 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { FindOneUserDto } from 'src/users/dto/find-one-user.dto';
-import { User } from 'src/users/schemas/user.schema';
-import { jwtConstants } from './constants';
-import { InjectModel } from '@nestjs/mongoose';
-import * as refreshTokenSchema from 'src/auth/schemas/refresh-token.schema';
-import { Model } from 'mongoose';
+import { ValidateUserDto } from './dto/validate-user.dto';
+import { User } from 'src/users/user.entity';
+import { AccessTokenPayloadDto } from './dto/access-token-payload.dto';
+import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
+import { RefreshToken } from './refresh-token.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService,
-    @InjectModel(refreshTokenSchema.RefreshToken.name)
-    private refreshTokensModel: Model<refreshTokenSchema.RefreshTokenDocument>,
+    @Inject('JwtAccessService')
+    private readonly jwtAccessService: JwtService,
+    @Inject('JwtRefreshService')
+    private readonly jwtRefreshService: JwtService,
+    @InjectRepository(RefreshToken)
+    private readonly refreshTokenRepository: Repository<RefreshToken>,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const findOneUserDto: FindOneUserDto = { username };
-    const user = await this.usersService.findOne(findOneUserDto);
-    if (user && user.password === pass) {
+  async validateUser(validateUserDto: ValidateUserDto): Promise<any> {
+    const user = await this.usersService.findUserByEmail({
+      email: validateUserDto.email,
+    });
+    if (user && user.password === validateUserDto.password) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
@@ -27,27 +37,53 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User): Promise<any> {
-    const accessTokenPayload = { username: user.username, sub: user._id };
-
-    const refreshTokenPayload = { username: user.username, sub: user._id };
-
-    const signedRefreshToken = this.jwtService.sign(refreshTokenPayload, {
-      secret: jwtConstants.refresh_token_secret,
-      expiresIn: jwtConstants.refresh_token_expires,
-    });
-
-    const refreshToken = new this.refreshTokensModel({
-      user,
-      token: signedRefreshToken,
-    });
-
-    await refreshToken.save();
-
+  async login(
+    user: User,
+  ): Promise<{ access_token: string; refresh_token: string }> {
     return {
-      access_token: this.jwtService.sign(accessTokenPayload),
-      // Can also be implemented as another provider - https://stackoverflow.com/a/59916105
-      refresh_token: signedRefreshToken,
+      access_token: await this.generateAccessToken(user),
+      refresh_token: await this.generateRefreshToken(user),
     };
+  }
+
+  async generateRefreshToken(user: User): Promise<string> {
+    const refreshTokenPayload: RefreshTokenPayloadDto = {
+      email: user.email,
+      sub: user.id,
+    };
+
+    const signedRefreshToken = this.jwtRefreshService.sign(refreshTokenPayload);
+
+    const refreshToken: RefreshToken = {
+      userId: user.id,
+      token: signedRefreshToken,
+      expiresIn: new Date(
+        1000 * this.jwtRefreshService.decode(signedRefreshToken)['exp'],
+      ),
+    };
+
+    await this.refreshTokenRepository.insert(refreshToken);
+    return signedRefreshToken;
+  }
+
+  async getUserIfRefreshTokenIsValid(
+    refreshTokenPayloadDto: RefreshTokenPayloadDto,
+    refreshToken: string,
+  ): Promise<User> {
+    const token = await this.refreshTokenRepository.findOne({
+      where: { token: refreshToken, userId: refreshTokenPayloadDto.sub },
+    });
+    if (!token) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+    return await this.usersService.findUserById({ id: token.userId });
+  }
+
+  async generateAccessToken(user: User): Promise<string> {
+    const accessTokenPayload: AccessTokenPayloadDto = {
+      email: user.email,
+      sub: user.id,
+    };
+    return this.jwtAccessService.sign(accessTokenPayload);
   }
 }

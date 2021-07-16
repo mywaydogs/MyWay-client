@@ -1,30 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateUserDto } from './dto/create-user.dto';
-import { FindOneUserDto } from './dto/find-one-user.dto';
-import * as userSchema from './schemas/user.schema';
-
-// This should be a real class/interface representing a user entity
-export type User = any;
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { FindUserByIdDto } from './dto/find-user-by-id.dto';
+import { FindUserByEmailDto } from './dto/find-user-by-email.dto';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(userSchema.User.name)
-    private userModel: Model<userSchema.UserDocument>,
+    @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<userSchema.User> {
-    const createdUser = new this.userModel(createUserDto);
-    return createdUser.save();
+  async findUserById(findUserByIdDto: FindUserByIdDto): Promise<User> {
+    return this.usersRepository.findOne(findUserByIdDto.id);
   }
 
-  async findAll(): Promise<userSchema.User[]> {
-    return this.userModel.find().exec();
-  }
-
-  async findOne(findOneUserDto: FindOneUserDto): Promise<User | undefined> {
-    return this.userModel.findOne(findOneUserDto).lean();
+  async findUserByEmail(findUserByEmailDto: FindUserByEmailDto): Promise<User> {
+    return this.usersRepository.findOne({
+      where: { email: findUserByEmailDto.email },
+    });
   }
 }

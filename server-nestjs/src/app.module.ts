@@ -1,19 +1,20 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { JwtRefreshModule } from './jwt-refresh/jwt-refresh.module';
+import { JwtAccessModule } from './jwt-access/jwt-access.module';
 
 @Module({
   imports: [
     UsersModule,
     AuthModule,
-    MongooseModule.forRoot('mongodb://localhost:3333/MyWay', {
-      // set because of a warning: collection.ensureIndex is deprecated. Use createIndexes instead
-      useCreateIndex: true,
-    }),
+    TypeOrmModule.forRoot({ autoLoadEntities: true }),
+    JwtRefreshModule,
+    JwtAccessModule,
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],
