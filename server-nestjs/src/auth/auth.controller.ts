@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtRefreshGuard } from 'src/jwt-refresh/jwt-refresh.guard';
 import { AuthService } from './auth.service';
 import { AccessTokenResponseBodyDto } from './dto/access-token-response-body.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
 import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller('auth')
@@ -23,6 +32,11 @@ export class AuthController {
       path: '/auth/refresh',
     });
     return { access_token };
+  }
+
+  @Post('register')
+  async register(@Body() registerUserDto: RegisterUserDto): Promise<void> {
+    return await this.authService.register(registerUserDto);
   }
 
   @UseGuards(JwtRefreshGuard)

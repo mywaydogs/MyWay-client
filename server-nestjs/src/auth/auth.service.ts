@@ -13,6 +13,9 @@ import { RefreshTokenPayloadDto } from './dto/refresh-token-payload.dto';
 import { RefreshToken } from './refresh-token.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
 @Injectable()
 export class AuthService {
   constructor(
@@ -29,7 +32,11 @@ export class AuthService {
     const user = await this.usersService.findUserByEmail({
       email: validateUserDto.email,
     });
-    if (user && user.password === validateUserDto.password) {
+
+    if (
+      user &&
+      (await bcrypt.compare(validateUserDto.password, user.password))
+    ) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
@@ -85,5 +92,21 @@ export class AuthService {
       sub: user.id,
     };
     return this.jwtAccessService.sign(accessTokenPayload);
+  }
+
+  async register(registerUserDto: RegisterUserDto): Promise<void> {
+    const { email, password, firstName, lastName } = registerUserDto;
+
+    const saltOrRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltOrRounds);
+
+    const createUserDto: CreateUserDto = {
+      email,
+      password: hashedPassword,
+      firstName,
+      lastName,
+    };
+
+    await this.usersService.createUser(createUserDto);
   }
 }

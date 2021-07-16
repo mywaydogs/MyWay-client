@@ -6,8 +6,12 @@ import { config } from './config/config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.setGlobalPrefix('api');
+
+  app.enableCors({ credentials: true });
+
   app.use(cookieParser(config.cookie_secret));
 
-  await app.listen(3000);
+  await app.listen(3001);
 }
 bootstrap();
