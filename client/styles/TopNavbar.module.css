@@ -1,0 +1,17 @@
+.topNav {
+  height: 5vh;
+  border: 1px solid black;
+}
+
+.topNav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  float: right;
+  display: flex;
+  flex-direction: row;
+}
+
+.topNav ul li {
+  margin: auto 15px;
+}

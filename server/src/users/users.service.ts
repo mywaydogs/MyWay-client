@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FindUserByIdDto } from './dto/find-user-by-id.dto';
 import { FindUserByEmailDto } from './dto/find-user-by-email.dto';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class UsersService {
 
   async createUser(createUserDto: CreateUserDto): Promise<void> {
     try {
-      await await this.usersRepository.insert(createUserDto);
+      await this.usersRepository.insert(createUserDto);
     } catch (e) {
       if (e.code == 23505) {
         throw new ForbiddenException('Email is already in use.');

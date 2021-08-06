@@ -7,6 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { JwtRefreshModule } from './jwt-refresh/jwt-refresh.module';
 import { JwtAccessModule } from './jwt-access/jwt-access.module';
+import { CustomersModule } from './customers/customers.module';
+import { DogsModule } from './dogs/dogs.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { JwtAccessModule } from './jwt-access/jwt-access.module';
     TypeOrmModule.forRoot({ autoLoadEntities: true }),
     JwtRefreshModule,
     JwtAccessModule,
+    CustomersModule,
+    DogsModule,
   ],
   controllers: [AppController, AuthController],
   providers: [AppService],

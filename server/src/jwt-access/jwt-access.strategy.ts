@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { AccessTokenPayloadDto } from '../auth/dto/access-token-payload.dto';
 import { UsersService } from 'src/users/users.service';
 import { config } from 'src/config/config';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(
@@ -12,11 +13,19 @@ export class JwtAccessStrategy extends PassportStrategy(
 ) {
   constructor(private readonly usersService: UsersService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request: Request) => {
+          return request?.signedCookies?.accessToken;
+        },
+      ]),
       secretOrKey: config.access_token_secret,
-      signOptions: { expiresIn: config.access_token_expires },
     });
+    // super({
+    //   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    //   ignoreExpiration: false,
+    //   secretOrKey: config.access_token_secret,
+    //   signOptions: { expiresIn: config.access_token_expires },
+    // });
   }
 
   async validate(payload: AccessTokenPayloadDto) {

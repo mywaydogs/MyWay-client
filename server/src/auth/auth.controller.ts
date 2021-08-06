@@ -7,9 +7,9 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { JwtAccessGuard } from 'src/jwt-access/jwt-access.guard';
 import { JwtRefreshGuard } from 'src/jwt-refresh/jwt-refresh.guard';
 import { AuthService } from './auth.service';
-import { AccessTokenResponseBodyDto } from './dto/access-token-response-body.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LocalAuthGuard } from './local-auth.guard';
 
@@ -19,19 +19,20 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(
-    @Req() req,
-    @Res({ passthrough: true }) response,
-  ): Promise<AccessTokenResponseBodyDto> {
+  async login(@Req() req, @Res({ passthrough: true }) response): Promise<void> {
     const { access_token, refresh_token } = await this.authService.login(
       req.user,
     );
     response.cookie('refreshToken', refresh_token, {
       signed: true,
       httpOnly: true,
-      path: '/auth/refresh',
+      path: '/api/auth/refresh',
     });
-    return { access_token };
+    response.cookie('accessToken', access_token, {
+      signed: true,
+      httpOnly: true,
+      path: '/api',
+    });
   }
 
   @Post('register')
@@ -41,9 +42,33 @@ export class AuthController {
 
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
-  async refresh(@Req() req): Promise<AccessTokenResponseBodyDto> {
-    return {
-      access_token: await this.authService.generateAccessToken(req.user),
-    };
+  async refresh(
+    @Req() req,
+    @Res({ passthrough: true }) response,
+  ): Promise<void> {
+    response.cookie(
+      'accessToken',
+      await this.authService.generateAccessToken(req.user),
+      {
+        signed: true,
+        httpOnly: true,
+        path: '/api',
+      },
+    );
+  }
+
+  @UseGuards(JwtAccessGuard)
+  @Get('logout')
+  logout(@Res({ passthrough: true }) response): void {
+    response.clearCookie('accessToken', {
+      signed: true,
+      httpOnly: true,
+      path: '/api',
+    });
+    response.clearCookie('refreshToken', {
+      signed: true,
+      httpOnly: true,
+      path: '/api/auth/refresh',
+    });
   }
 }

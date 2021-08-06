@@ -1,0 +1,12 @@
+.rootDiv {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+}
+
+.mainDiv {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+}
+
