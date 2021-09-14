@@ -3,30 +3,32 @@ import useSWR from "swr";
 import axios from "axios";
 import Router from "next/router";
 import { UserDto } from "../dto/user.dto";
+import { LoginDto } from "../dto/auth/login.dto";
+import API from "./api.service";
 
-axios.interceptors.response.use(
-  function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
-    return response;
-  },
-  async function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
+// axios.interceptors.response.use(
+//   function (response) {
+//     // Any status code that lie within the range of 2xx cause this function to trigger
+//     // Do something with response data
+//     return response;
+//   },
+//   async function (error) {
+//     // Any status codes that falls outside the range of 2xx cause this function to trigger
+//     // Do something with response error
 
-    if (
-      error?.response?.status == 401 &&
-      error.config.url !== "/api/auth/refresh" &&
-      !error.config._retry
-    ) {
-      error.config._retry = true;
-      await axios.get("/api/auth/refresh");
-      return axios(error.config);
-    }
+//     if (
+//       error?.response?.status == 401 &&
+//       error.config.url !== "/api/auth/refresh" &&
+//       !error.config._retry
+//     ) {
+//       error.config._retry = true;
+//       await axios.get("/api/auth/refresh");
+//       return axios(error.config);
+//     }
 
-    return Promise.reject(error);
-  }
-);
+//     return Promise.reject(error);
+//   }
+// );
 
 interface UseUserInterface {
   user: UserDto;
@@ -57,4 +59,10 @@ export function useUser({
   }, [redirectTo, redirectIfFound, data, error]);
 
   return { user: data?.data, error };
+}
+
+export default class AuthService {
+  login(loginDto: LoginDto) {
+    API.post
+  }
 }

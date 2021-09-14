@@ -1,13 +1,18 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import Router from "next/router";
 import Spinner from "../utils/spinner.component";
 import Alert from "../utils/alert.component";
+import ErrorMessage from "../utils/forms/error-message.component";
 
 const LoginSchema = Yup.object().shape({
-  email: Yup.string().email().required(),
-  password: Yup.string().min(8).required(),
+  email: Yup.string()
+    .email("The email address provided in invalid.")
+    .required("An email address is required."),
+  password: Yup.string()
+    .min(8, "A password must be at least 8 characters.")
+    .required("A password is required."),
 });
 
 export default function LoginForm() {
@@ -25,7 +30,6 @@ export default function LoginForm() {
             setTimeout(() => Router.push("/"), 2000);
           })
           .catch((e) => {
-            console.log(e.response);
             setStatus({ error: e.response.data.message });
           })
           .finally(() => setSubmitting(false));

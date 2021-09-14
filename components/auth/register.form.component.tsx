@@ -1,15 +1,20 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import Router from "next/router";
 import Alert from "../utils/alert.component";
 import Spinner from "../utils/spinner.component";
+import ErrorMessage from "../utils/forms/error-message.component";
 
 const RegisterSchema = Yup.object().shape({
-  firstName: Yup.string().required(),
-  lastName: Yup.string().required(),
-  email: Yup.string().email().required(),
-  password: Yup.string().min(8).required(),
+  firstName: Yup.string().required("First name is required."),
+  lastName: Yup.string().required("Last name is required."),
+  email: Yup.string()
+    .email("The email address provided in invalid.")
+    .required("An email address is required."),
+  password: Yup.string()
+    .min(8, "A password must be at least 8 characters.")
+    .required("A password is required."),
 });
 
 export default function RegisterForm() {
@@ -25,7 +30,14 @@ export default function RegisterForm() {
         axios
           .post("/api/auth/register", values)
           .then((res) => {
-            setStatus({ message: "You have registered successfully." });
+            setStatus({
+              message: "You have registered successfully. Logging in ...",
+            });
+          })
+          .then(() => {
+            return axios.post("/api/auth/login", values);
+          })
+          .then((res) => {
             setTimeout(() => Router.push("/"), 2000);
           })
           .catch((e) => {

@@ -6,8 +6,10 @@ export default function Layout({ children }: React.PropsWithChildren<{}>) {
   return (
     <div className="flex min-h-screen w-full">
       <SideNavbar />
-      <div className="flex-col min-h-screen">
-        <TopNavbar />
+      <div className="flex-col w-full">
+        <div>
+          <TopNavbar />
+        </div>
         <main className="w-full h-full">{children}</main>
       </div>
     </div>

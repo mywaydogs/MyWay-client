@@ -4,12 +4,14 @@ import { useUser } from "../services/auth.service";
 export default function Register() {
   const { user, error } = useUser({ redirectTo: "/", redirectIfFound: true });
   return (
-    <div className="flex-col items-center">
-      <div className="w-full flex justify-center">
-        <h1>Register</h1>
-      </div>
-      <div className="w-full flex justify-center">
-        <RegisterForm />
+    <div className="h-full flex items-center justify-center">
+      <div>
+        <div className="flex justify-center items-center">
+          <h1 className="text-4xl">Register</h1>
+        </div>
+        <div className="flex justify-center items-center">
+          <RegisterForm />
+        </div>
       </div>
     </div>
   );

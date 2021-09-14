@@ -15,7 +15,7 @@ export default function TopNavbar() {
 
   return (
     <nav>
-      <ul>
+      <ul className='flex'>
         <li
           onClick={() => setProfileMenu(!profileMenu)}
         >
