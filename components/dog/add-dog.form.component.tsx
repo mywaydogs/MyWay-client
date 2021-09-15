@@ -1,13 +1,11 @@
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useUser } from "../../services/auth.service";
 
 interface AddDogFormProps {
   customerId: number;
 }
 
 export default function AddDogForm(props: AddDogFormProps) {
-  const user = useUser();
 
   return (
     <Formik

@@ -1,9 +1,10 @@
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useUser } from "../services/auth.service";
+import { useStores } from "../stores";
 
 export default function Profile() {
-  const { user } = useUser();
+  const { userStore } = useStores();
+  const { user } = userStore;
 
   if (!user) {
     return <>Loading...</>;

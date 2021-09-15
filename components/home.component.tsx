@@ -2,11 +2,12 @@ import Link from "next/link";
 import useSWR from "swr";
 import { DogDto } from "../dto/dog.dto";
 import { TrainerDto } from "../dto/trainer.dto";
-import { useUser } from "../services/auth.service";
+import { useStores } from "../stores";
 import DogsTiles from "./dog/dogs-tiles.component";
 
 export default function Home() {
-  const { user } = useUser();
+  const { userStore } = useStores();
+  const { user } = userStore;
 
   const { data: dogsData, error: dogsError } = useSWR("/api/dogs");
 
@@ -29,7 +30,7 @@ export default function Home() {
         <hr />
         <h2>Looking for a dog trainer? Meet some of our trainers</h2>
 
-        <div className='flex justify-items-start flex-wrap'>
+        <div className="flex justify-items-start flex-wrap">
           {trainers &&
             trainers.map((trainer) => (
               <Link href={`/trainers/${trainer.id}`} key={trainer.id}>

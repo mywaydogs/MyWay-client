@@ -1,10 +1,11 @@
 import { Field, Form, Formik } from "formik";
-import axios from "axios";
-import * as Yup from "yup";
 import Router from "next/router";
+import * as Yup from "yup";
+import { APIErrorResponse } from "../../dto/api/api-error-response";
+import { useStores } from "../../stores";
 import Alert from "../utils/alert.component";
-import Spinner from "../utils/spinner.component";
 import ErrorMessage from "../utils/forms/error-message.component";
+import Spinner from "../utils/spinner.component";
 
 const RegisterSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required."),
@@ -18,6 +19,8 @@ const RegisterSchema = Yup.object().shape({
 });
 
 export default function RegisterForm() {
+  const { userStore } = useStores();
+
   return (
     <Formik
       initialValues={{
@@ -27,21 +30,16 @@ export default function RegisterForm() {
         password: "",
       }}
       onSubmit={async (values, { setSubmitting, setStatus }) => {
-        axios
-          .post("/api/auth/register", values)
-          .then((res) => {
+        userStore
+          .register(values)
+          .then(() => {
             setStatus({
               message: "You have registered successfully. Logging in ...",
             });
-          })
-          .then(() => {
-            return axios.post("/api/auth/login", values);
-          })
-          .then((res) => {
             setTimeout(() => Router.push("/"), 2000);
           })
-          .catch((e) => {
-            setStatus({ error: e.response.data.message });
+          .catch((e: APIErrorResponse) => {
+            setStatus({ error: e.message });
           })
           .finally(() => setSubmitting(false));
       }}

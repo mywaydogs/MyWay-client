@@ -5,6 +5,8 @@ import Router from "next/router";
 import Spinner from "../utils/spinner.component";
 import Alert from "../utils/alert.component";
 import ErrorMessage from "../utils/forms/error-message.component";
+import { useStores } from "../../stores";
+import { APIErrorResponse } from "../../dto/api/api-error-response";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -16,6 +18,8 @@ const LoginSchema = Yup.object().shape({
 });
 
 export default function LoginForm() {
+  const { userStore } = useStores();
+
   return (
     <Formik
       initialValues={{
@@ -23,14 +27,14 @@ export default function LoginForm() {
         password: "",
       }}
       onSubmit={(values, { setSubmitting, setStatus }) => {
-        axios
-          .post("/api/auth/login", values)
-          .then((res) => {
+        userStore
+          .login(values)
+          .then(() => {
             setStatus({ message: "You have logged in successfully." });
             setTimeout(() => Router.push("/"), 2000);
           })
-          .catch((e) => {
-            setStatus({ error: e.response.data.message });
+          .catch((e: APIErrorResponse) => {
+            setStatus({ error: e.message });
           })
           .finally(() => setSubmitting(false));
       }}

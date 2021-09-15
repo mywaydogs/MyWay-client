@@ -1,12 +1,9 @@
 import Link from "next/link";
-import { useState } from "react";
 import useSWR from "swr";
 import AddCustomerForm from "../../components/customer/add-customer.form.component";
 import { CustomerDto } from "../../dto/customer.dto";
-import { useUser } from "../../services/auth.service";
 
 export default function Customers() {
-  const { user, error: userError } = useUser({ redirectTo: "/login" });
   const { data, error } = useSWR(() => `/api/customers?userId=${user.id}`);
   const customers: CustomerDto[] = data?.data;
 

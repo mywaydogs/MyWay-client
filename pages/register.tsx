@@ -1,8 +1,7 @@
 import RegisterForm from "../components/auth/register.form.component";
-import { useUser } from "../services/auth.service";
+import Link from "next/link";
 
 export default function Register() {
-  const { user, error } = useUser({ redirectTo: "/", redirectIfFound: true });
   return (
     <div className="h-full flex items-center justify-center">
       <div>
@@ -11,6 +10,12 @@ export default function Register() {
         </div>
         <div className="flex justify-center items-center">
           <RegisterForm />
+        </div>
+        <div className="flex justify-center my-4">
+          Already have an account?
+          <Link href="/login">
+            <a className="mx-1 font-medium underline">Login</a>
+          </Link>
         </div>
       </div>
     </div>

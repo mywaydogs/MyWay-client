@@ -1,9 +1,7 @@
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useUser } from "../../services/auth.service";
 
 export default function AddCustomerForm() {
-  const { user } = useUser();
 
   return (
     <Formik

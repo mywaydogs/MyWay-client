@@ -1,8 +1,7 @@
+import Link from "next/link";
 import LoginForm from "../components/auth/login.form.component";
-import { useUser } from "../services/auth.service";
 
 export default function Login() {
-  const user = useUser({ redirectTo: "/", redirectIfFound: true });
   return (
     <div className="h-full flex items-center justify-center">
       <div>
@@ -11,6 +10,12 @@ export default function Login() {
         </div>
         <div className="flex justify-center items-center">
           <LoginForm />
+        </div>
+        <div className="flex justify-center my-4">
+          Don't have an account yet?
+          <Link href="/register">
+            <a className="mx-1 font-medium underline">Register</a>
+          </Link>
         </div>
       </div>
     </div>
