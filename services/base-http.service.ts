@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import Router from "next/router";
 import { APIErrorResponse } from "../dto/api/api-error-response";
 import { APIResponse } from "../dto/api/api-response";
 
@@ -10,7 +11,7 @@ export default class BaseHttpService {
 
   async get<T = any>(
     endpoint: string,
-    options: AxiosRequestConfig
+    options: AxiosRequestConfig = {}
   ): Promise<T | void> {
     Object.assign(options, this._getCommonOptions());
     return axios
@@ -83,7 +84,7 @@ export default class BaseHttpService {
   }
 
   _handle401() {
-    window.location.hash = "/login";
+    Router.push("/login");
   }
 
   _getCommonOptions() {

@@ -6,3 +6,5 @@ export interface DogDto {
   color: string;
   birthDate: string;
 }
+
+

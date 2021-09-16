@@ -12,10 +12,7 @@ export default class UserStore {
     private readonly rootStore: RootStore,
     private readonly authService: AuthService
   ) {
-    this.authService = authService;
-
     this.user = null;
-
     makeAutoObservable(this);
   }
 

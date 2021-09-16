@@ -1,15 +1,9 @@
 import Link from "next/link";
-import { DogDto } from "../../dto/dog.dto";
+import { DogDto } from "../../dto/dogs/dog.dto";
 
-interface DogsTilesProps {
-  dogs: DogDto[];
-}
-
-export default function DogsTiles(props: DogsTilesProps) {
-  const dogs = props.dogs;
-
-  if (!dogs) {
-    return <>Loading...</>;
+export default function DogsTiles({ dogs }: { dogs: DogDto[] }) {
+  if (!dogs.length) {
+    return <>You have no dogs yet. Create one</>;
   }
 
   return (

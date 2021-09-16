@@ -1,27 +1,33 @@
 import { useRouter } from "next/router";
-import useSWR from "swr";
 import { CustomerDto } from "../../dto/customer.dto";
 import AddDogForm from "../../components/dog/add-dog.form.component";
-import { DogDto } from "../../dto/dog.dto";
+import { DogDto } from "../../dto/dogs/dog.dto";
 import DogsTiles from "../../components/dog/dogs-tiles.component";
+import { useEffect, useState } from "react";
+import { useStores } from "../../stores";
+import Spinner from "../../components/utils/spinner.component";
 
 export default function CustomerPage() {
+  const [customer, setCustomer] = useState<CustomerDto | null>(null);
+  const [dogs, setDogs] = useState<DogDto[] | null>(null);
+
   const router = useRouter();
-  const { id } = router.query;
-  const { data: customerData, error: customerError } = useSWR(
-    id ? `/api/customers/${id}` : null
-  );
+  const customerId = parseInt(router.query.id as string, 10);
 
-  const customer: CustomerDto = customerData?.data;
+  const { dogsStore, customersStore } = useStores();
 
-  const { data: dogsData, error: dogsError } = useSWR(
-    customer ? `/api/dogs?customerId=${customer.id}` : null
-  );
-
-  const dogs: DogDto[] = dogsData?.data;
+  useEffect(() => {
+    if (customerId) {
+      customersStore
+        .findOne(customerId)
+        .then((customer: CustomerDto) => setCustomer(customer))
+        .then(() => dogsStore.findAll({ customerId }))
+        .then((dogs: DogDto[]) => setDogs(dogs));
+    }
+  }, [customerId]);
 
   if (!customer) {
-    return <>Loading...</>;
+    return <Spinner />;
   }
 
   return (
@@ -29,7 +35,11 @@ export default function CustomerPage() {
       {customer.firstName} {customer.lastName} {customer.email}{" "}
       {customer.address} {customer.phone}
       <AddDogForm customerId={customer.id} />
-      <DogsTiles dogs={dogs} />
+      {dogs == null && <Spinner />}
+      {dogs && dogs.length === 0 && (
+        <>This customer doesn't have any dogs yet. Create one.</>
+      )}
+      {dogs && <DogsTiles dogs={dogs} />}
     </>
   );
 }

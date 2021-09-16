@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import useSWR from "swr";
-import { DogDto } from "../../dto/dog.dto";
+import { DogDto } from "../../dto/dogs/dog.dto";
 import { TrainingGoalDto } from "../../dto/training-goal.dto";
 import AddTrainingGoalTaskForm from "./add-training-goal-task.form.component";
 import AddTrainingGoalForm from "./add-training-goal.form.component";

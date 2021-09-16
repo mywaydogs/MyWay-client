@@ -1,29 +1,23 @@
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import useSWR from "swr";
-import { DogDto } from "../../dto/dog.dto";
+import { DogDto } from "../../dto/dogs/dog.dto";
 import {
   calculateDiffInMonths,
   calculateDiffInYears,
 } from "../../services/time.service";
+import Spinner from "../utils/spinner.component";
 
-export default function DogProfile({ dogId }: { dogId: number }) {
-  const { data: dogData, error: dogError } = useSWR(
-    dogId ? `/api/dogs/${dogId}` : null
-  );
-
-  const dog: DogDto = dogData?.data;
-
-  if (!dog) {
-    return <>Loading...</>;
+export default function DogProfile({ dog }: { dog: DogDto }) {
+  if (dog == null) {
+    return <Spinner />;
   }
 
   return (
     <div>
-      <div >
-        <div >
+      <div>
+        <div>
           <div>Dog{"'"}s picture</div>
-          <span ></span>
+          <span></span>
         </div>
         <div>
           <div>

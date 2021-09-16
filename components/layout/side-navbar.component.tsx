@@ -16,7 +16,10 @@ export default function SideNavbar() {
             </Link>
           </li>
           <li>
-            <Link href="/customers">Customers</Link>
+            <Link href="/dogs">My Dogs</Link>
+          </li>
+          <li>
+            <Link href="/customers">My Customers</Link>
           </li>
         </ul>
       </nav>

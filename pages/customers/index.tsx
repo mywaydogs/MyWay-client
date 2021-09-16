@@ -1,14 +1,23 @@
 import Link from "next/link";
-import useSWR from "swr";
+import { useEffect, useState } from "react";
 import AddCustomerForm from "../../components/customer/add-customer.form.component";
+import Spinner from "../../components/utils/spinner.component";
 import { CustomerDto } from "../../dto/customer.dto";
+import { useStores } from "../../stores";
 
 export default function Customers() {
-  const { data, error } = useSWR(() => `/api/customers?userId=${user.id}`);
-  const customers: CustomerDto[] = data?.data;
+  const [customers, setCustomers] = useState<CustomerDto[] | null>(null);
 
-  if (!customers) {
-    return <>Loading...</>;
+  const { customersStore } = useStores();
+
+  useEffect(() => {
+    customersStore
+      .findAll()
+      .then((customers: CustomerDto[]) => setCustomers(customers));
+  }, []);
+
+  if (customers == null) {
+    return <Spinner />;
   }
 
   return (
@@ -16,6 +25,8 @@ export default function Customers() {
       <AddCustomerForm />
 
       {/* TODO: Search by customer firstname, lastname, a customer's contact first name or last name, or a dog's name */}
+
+      {customers.length === 0 && <>You have no customers yet. Create one.</>}
 
       <ul>
         {customers.map((c) => (
