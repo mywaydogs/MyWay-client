@@ -1,4 +1,5 @@
 import { Form, Formik } from "formik";
+import { observer } from "mobx-react-lite";
 import Router from "next/router";
 import * as Yup from "yup";
 import { APIErrorResponse } from "../../dto/api/api-error-response";
@@ -17,7 +18,7 @@ const LoginSchema = Yup.object().shape({
     .required("A password is required."),
 });
 
-export default function LoginForm() {
+const LoginForm = observer(function LoginForm() {
   const { userStore } = useStores();
 
   return (
@@ -54,4 +55,6 @@ export default function LoginForm() {
       )}
     </Formik>
   );
-}
+});
+
+export default LoginForm;

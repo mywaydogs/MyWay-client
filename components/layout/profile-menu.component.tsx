@@ -1,30 +1,32 @@
 import { faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { useStores } from "../../stores";
 
-export default function ProfileMenu() {
+const ProfileMenu = observer(function ProfileMenu() {
   const { userStore } = useStores();
   const { user } = userStore;
 
   return (
-    <div className="absolute">
+    <div className="absolute border w-48 transform -translate-x-3/4 mt-2 bg-gray-100 rounded-lg p-3">
       {user ? (
         <>
-          <div>
-            <Link href="/profile">
-              <a>
-                <FontAwesomeIcon icon={faUser} width="16px" /> Profile
-              </a>
-            </Link>
-          </div>
+          <Link href="/profile">
+            <a className="flex items-center">
+              <FontAwesomeIcon icon={faUser} className="w-4 inline mr-2" />{" "}
+              Profile
+            </a>
+          </Link>
           <div
+            className="cursor-pointer"
             onClick={() => {
-              axios.get("/api/auth/logout");
+              userStore.logout();
             }}
           >
-            <FontAwesomeIcon icon={faSignOutAlt} width="16px" /> Logout
+            <FontAwesomeIcon icon={faSignOutAlt} className="w-4 inline mr-2" />
+            Logout
           </div>
         </>
       ) : (
@@ -39,4 +41,6 @@ export default function ProfileMenu() {
       )}
     </div>
   );
-}
+});
+
+export default ProfileMenu;

@@ -6,7 +6,7 @@ export default function Layout({ children }: React.PropsWithChildren<{}>) {
   return (
     <div className="flex-col min-h-screen w-full">
       <TopNavbar />
-      <div className="flex w-full">
+      <div className="w-5/6 flex justify-center">
         <SideNavbar />
         <main className="w-full h-full">
           <div className="m-auto w-2/3">{children}</div>

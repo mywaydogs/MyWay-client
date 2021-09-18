@@ -33,6 +33,11 @@ export default class UserStore {
     this.user = await this.authService.login(loginDto);
   }
 
+  async logout(): Promise<void> {
+    this.user = null;
+    await this.authService.logout();
+  }
+
   async getUserProfile(): Promise<UserDto> {
     return await this.authService.getUserProfile();
   }

@@ -7,16 +7,19 @@ import Link from "next/link";
 import { faPaw } from "@fortawesome/free-solid-svg-icons";
 import { observer } from "mobx-react-lite";
 
-const TopNavbar = observer(() => {
+const TopNavbar = observer(function TopNavBar() {
   const [profileMenu, setProfileMenu] = useState(false);
+  const [delayHandler, setDelayHandler] = useState<null | ReturnType<
+    typeof setTimeout
+  >>(null);
 
   const { userStore } = useStores();
 
   const { user } = userStore;
 
   return (
-    <nav className="h-8">
-      <ul className="mx-3">
+    <nav className="flex justify-center h-8">
+      <ul className="w-10/12">
         <div className="float-left">
           <Link href="/">
             <li className="flex items-center justify-center cursor-pointer">
@@ -29,8 +32,19 @@ const TopNavbar = observer(() => {
         </div>
         <li
           className="inline float-right"
-          onMouseEnter={() => setProfileMenu(!profileMenu)}
-          onMouseLeave={() => setProfileMenu(!profileMenu)}
+          onMouseEnter={() => {
+            setProfileMenu(true);
+            if (delayHandler) {
+              clearTimeout(delayHandler);
+            }
+          }}
+          onMouseLeave={() =>
+            setDelayHandler(
+              setTimeout(() => {
+                setProfileMenu(false);
+              }, 300)
+            )
+          }
         >
           {user ? (
             user.profileImage ? (
@@ -44,7 +58,6 @@ const TopNavbar = observer(() => {
           ) : (
             <>Guest</>
           )}
-          <FontAwesomeIcon icon={faSortDown} className="w-3 inline-block" />
           {profileMenu && <ProfileMenu />}
         </li>
       </ul>

@@ -33,7 +33,7 @@ const accountValidationSchema = Yup.object().shape({
     .min(8, "A password must be at least 8 characters."),
 });
 
-const Profile = observer(() => {
+const Profile = observer(function Profile() {
   const { userStore } = useStores();
   const { user } = userStore;
 

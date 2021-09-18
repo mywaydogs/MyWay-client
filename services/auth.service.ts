@@ -1,3 +1,4 @@
+import Router from "next/router";
 import { LoginDto } from "../dto/auth/login.dto";
 import { RegisterDto } from "../dto/auth/register.dto";
 import { UserDto } from "../dto/auth/user.dto";
@@ -11,6 +12,11 @@ export default class AuthService extends BaseHttpService {
 
   async register(registerDto: RegisterDto): Promise<void> {
     return await this.post("/api/auth/register", registerDto);
+  }
+
+  async logout(): Promise<void> {
+    await this.get("/api/auth/logout");
+    Router.push("/");
   }
 
   async getUserProfile(): Promise<UserDto> {
