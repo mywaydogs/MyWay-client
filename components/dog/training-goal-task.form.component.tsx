@@ -2,7 +2,7 @@ import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import useSWR from "swr";
 import { TrainingGoalTaskDto } from "../../dto/training-goal-task.dto";
-import { convertDateForDatePicker } from "../../services/time.service";
+import { convertDateForDatePicker } from "../../libraries/time.library";
 
 export default function TrainingGoalTaskForm({
   dogId,

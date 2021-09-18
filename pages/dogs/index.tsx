@@ -9,7 +9,7 @@ export default function DogsPage() {
   const { dogsStore } = useStores();
 
   useEffect(() => {
-    dogsStore.findAll().then((dogs: DogDto[]) => setDogs(dogs));
+    dogsStore.findAll({}).then((dogs: DogDto[]) => setDogs(dogs));
   }, []);
 
   if (dogs == null) {

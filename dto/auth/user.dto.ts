@@ -1,7 +1,7 @@
 export interface UserDto {
   id: number;
   email: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   aboutMe: string;
+  profileImage: string;
 }

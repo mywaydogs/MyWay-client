@@ -2,7 +2,6 @@ import { faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import Link from "next/link";
-import { SessionUserDto } from "../../dto/auth/session-user.dto";
 import { useStores } from "../../stores";
 
 export default function ProfileMenu() {
@@ -10,7 +9,7 @@ export default function ProfileMenu() {
   const { user } = userStore;
 
   return (
-    <div>
+    <div className="absolute">
       {user ? (
         <>
           <div>

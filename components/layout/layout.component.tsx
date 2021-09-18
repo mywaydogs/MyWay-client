@@ -4,13 +4,13 @@ import TopNavbar from "./top-navbar.component";
 
 export default function Layout({ children }: React.PropsWithChildren<{}>) {
   return (
-    <div className="flex min-h-screen w-full">
-      <SideNavbar />
-      <div className="flex-col w-full">
-        <div>
-          <TopNavbar />
-        </div>
-        <main className="w-full h-full">{children}</main>
+    <div className="flex-col min-h-screen w-full">
+      <TopNavbar />
+      <div className="flex w-full">
+        <SideNavbar />
+        <main className="w-full h-full">
+          <div className="m-auto w-2/3">{children}</div>
+        </main>
       </div>
     </div>
   );

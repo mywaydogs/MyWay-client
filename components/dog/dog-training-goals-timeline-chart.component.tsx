@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import React, { useCallback, useEffect, useRef } from "react";
 import { TrainingGoalDto } from "../../dto/training-goal.dto";
-import { calculateDiffInWeeks } from "../../services/time.service";
+import { calculateDiffInWeeks } from "../../libraries/time.library";
 const colorScheme = require("color-scheme");
 
 function* colors(): Generator<string> {

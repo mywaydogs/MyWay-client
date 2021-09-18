@@ -2,17 +2,23 @@ import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
 import { LoginDto } from "../dto/auth/login.dto";
 import { RegisterDto } from "../dto/auth/register.dto";
-import { SessionUserDto } from "../dto/auth/session-user.dto";
+import { UserDto } from "../dto/auth/user.dto";
+import { UpdateUserDto } from "../dto/user/update-user.dto";
 import AuthService from "../services/auth.service";
 
 export default class UserStore {
-  user: SessionUserDto | null;
+  user: UserDto | null;
 
   constructor(
     private readonly rootStore: RootStore,
     private readonly authService: AuthService
   ) {
     this.user = null;
+
+    this.getUserProfile().then((user: UserDto) => {
+      this.user = user;
+    });
+
     makeAutoObservable(this);
   }
 
@@ -25,5 +31,14 @@ export default class UserStore {
     const { email, password } = registerDto;
     const loginDto: LoginDto = { email, password };
     this.user = await this.authService.login(loginDto);
+  }
+
+  async getUserProfile(): Promise<UserDto> {
+    return await this.authService.getUserProfile();
+  }
+
+  async update(updateUserDto: UpdateUserDto): Promise<void> {
+    await this.authService.update(updateUserDto);
+    Object.assign(this.user, updateUserDto);
   }
 }

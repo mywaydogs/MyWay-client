@@ -1,16 +1,16 @@
-import { Field, Form, Formik } from "formik";
-import axios from "axios";
-import * as Yup from "yup";
+import { Form, Formik } from "formik";
 import Router from "next/router";
-import Spinner from "../utils/spinner.component";
-import Alert from "../utils/alert.component";
-import ErrorMessage from "../utils/forms/error-message.component";
-import { useStores } from "../../stores";
+import * as Yup from "yup";
 import { APIErrorResponse } from "../../dto/api/api-error-response";
+import { useStores } from "../../stores";
+import ErrorMessage from "../utils/forms/error-message.component";
+import FormField from "../utils/forms/form-field.component";
+import StatusMessage from "../utils/forms/status-message.component";
+import SubmitButton from "../utils/forms/submit-button.component";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
-    .email("The email address provided in invalid.")
+    .email("The email address provided is invalid.")
     .required("An email address is required."),
   password: Yup.string()
     .min(8, "A password must be at least 8 characters.")
@@ -42,36 +42,14 @@ export default function LoginForm() {
     >
       {({ isSubmitting, status }) => (
         <Form className="flex justify-center items-center flex-wrap w-96">
-          <Field
-            name="email"
-            type="email"
-            placeholder="Email"
-            className="w-full my-2"
-          />
+          <FormField name="email" type="email" placeholder="Email" />
           <ErrorMessage name="email" />
 
-          <Field
-            name="password"
-            type="password"
-            placeholder="Password"
-            className="w-full my-2"
-          />
+          <FormField name="password" type="password" placeholder="Password" />
           <ErrorMessage name="password" />
 
-          {status?.error && <Alert type="error" message={status?.error} />}
-
-          {status?.message && (
-            <Alert type="success" message={status?.message} />
-          )}
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
-          >
-            {!isSubmitting && "Submit"}
-            {isSubmitting && <Spinner />}
-          </button>
+          <StatusMessage formStatus={status} />
+          <SubmitButton isSubmitting={isSubmitting} />
         </Form>
       )}
     </Formik>

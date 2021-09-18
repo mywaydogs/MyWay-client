@@ -1,15 +1,15 @@
-import { Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import Router from "next/router";
 import * as Yup from "yup";
 import { APIErrorResponse } from "../../dto/api/api-error-response";
 import { useStores } from "../../stores";
-import Alert from "../utils/alert.component";
 import ErrorMessage from "../utils/forms/error-message.component";
-import Spinner from "../utils/spinner.component";
+import FormField from "../utils/forms/form-field.component";
+import StatusMessage from "../utils/forms/status-message.component";
+import SubmitButton from "../utils/forms/submit-button.component";
 
 const RegisterSchema = Yup.object().shape({
-  firstName: Yup.string().required("First name is required."),
-  lastName: Yup.string().required("Last name is required."),
+  name: Yup.string().required("Name is required."),
   email: Yup.string()
     .email("The email address provided in invalid.")
     .required("An email address is required."),
@@ -24,8 +24,7 @@ export default function RegisterForm() {
   return (
     <Formik
       initialValues={{
-        firstName: "",
-        lastName: "",
+        name: "",
         email: "",
         password: "",
       }}
@@ -47,52 +46,18 @@ export default function RegisterForm() {
     >
       {({ isSubmitting, status }) => (
         <Form className="flex w-96 justify-center items-center flex-wrap">
-          <Field
-            name="firstName"
-            type="text"
-            placeholder="First Name"
-            className="my-2 w-full"
-          />
-          <ErrorMessage name="firstName" />
+          <FormField name="name" type="text" placeholder="John Doe" />
+          <ErrorMessage name="name" />
 
-          <Field
-            name="lastName"
-            type="text"
-            placeholder="Last Name"
-            className="my-2 w-full"
-          />
-          <ErrorMessage name="lastName" />
-
-          <Field
-            name="email"
-            type="email"
-            placeholder="Email"
-            className="my-2 w-full"
-          />
+          <FormField name="email" type="email" placeholder="Email" />
           <ErrorMessage name="email" />
 
-          <Field
-            name="password"
-            type="password"
-            placeholder="Password"
-            className="my-2 w-full"
-          />
+          <FormField name="password" type="password" placeholder="Password" />
           <ErrorMessage name="password" />
 
-          {status?.error && <Alert type="error" message={status?.error} />}
+          <StatusMessage formStatus={status} />
 
-          {status?.message && (
-            <Alert type="success" message={status?.message} />
-          )}
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75"
-          >
-            {!isSubmitting && "Submit"}
-            {isSubmitting && <Spinner />}
-          </button>
+          <SubmitButton isSubmitting={isSubmitting} />
         </Form>
       )}
     </Formik>

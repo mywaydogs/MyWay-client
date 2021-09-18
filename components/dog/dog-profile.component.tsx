@@ -1,17 +1,18 @@
 import axios from "axios";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import { DogDto } from "../../dto/dogs/dog.dto";
 import {
   calculateDiffInMonths,
   calculateDiffInYears,
-} from "../../services/time.service";
+} from "../../libraries/time.library";
+import ErrorMessage from "../utils/forms/error-message.component";
 import Spinner from "../utils/spinner.component";
+import * as Yup from "yup";
+import SubmitButton from "../utils/forms/submit-button.component";
+
+const DogProfileSchema = Yup.object().shape({});
 
 export default function DogProfile({ dog }: { dog: DogDto }) {
-  if (dog == null) {
-    return <Spinner />;
-  }
-
   return (
     <div>
       <div>
@@ -54,44 +55,26 @@ export default function DogProfile({ dog }: { dog: DogDto }) {
             )
             .finally(() => actions.setSubmitting(false));
         }}
+        validationSchema={DogProfileSchema}
       >
         {({ isSubmitting, status }) => (
           <Form>
-            <div>
-              <label htmlFor="name">Name</label>
-              <Field name="name" placeholder="Name" />
-              <ErrorMessage name="name" />
-            </div>
+            <Field name="name" type="text" placeholder="Name" />
+            <ErrorMessage name="name" />
 
-            <div>
-              <label htmlFor="color">Color</label>
-              <Field name="color" placeholder="Color" />
-              <ErrorMessage name="color" />
-            </div>
-            <div>
-              <label htmlFor="breed">Breed</label>
-              <Field name="breed" placeholder="Breed" />
-              <ErrorMessage name="breed" />
-            </div>
-            <div>
-              <label htmlFor="age_years">Age (years)</label>
-              <Field name="age_years" placeholder="Age (years)" />
-              <ErrorMessage name="age_years" />
+            <Field name="color" type="text" placeholder="Color" />
+            <ErrorMessage name="color" />
+            <Field name="breed" type="text" placeholder="Breed" />
+            <ErrorMessage name="breed" />
+            <Field name="age_years" type="number" placeholder="Age (years)" />
+            <ErrorMessage name="age_years" />
 
-              <label htmlFor="age_months">Age (months)</label>
-              <Field name="age_months" placeholder="Age (months)" />
-              <ErrorMessage name="age_months" />
-            </div>
-
-            {!isSubmitting ? (
-              <button type="submit" disabled={isSubmitting}>
-                Save Changes
-              </button>
-            ) : (
-              <>saving...</>
-            )}
-
+            <Field name="age_months" type="number" placeholder="Age (months)" />
+            <ErrorMessage name="age_months" />
+            
             {status && <>{status.message}</>}
+
+            <SubmitButton isSubmitting={isSubmitting} />
           </Form>
         )}
       </Formik>

@@ -3,8 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useStores } from "../../stores";
 import ProfileMenu from "./profile-menu.component";
+import Link from "next/link";
+import { faPaw } from "@fortawesome/free-solid-svg-icons";
+import { observer } from "mobx-react-lite";
 
-export default function TopNavbar() {
+const TopNavbar = observer(() => {
   const [profileMenu, setProfileMenu] = useState(false);
 
   const { userStore } = useStores();
@@ -12,13 +15,32 @@ export default function TopNavbar() {
   const { user } = userStore;
 
   return (
-    <nav>
-      <ul className="flex">
-        <li onClick={() => setProfileMenu(!profileMenu)}>
+    <nav className="h-8">
+      <ul className="mx-3">
+        <div className="float-left">
+          <Link href="/">
+            <li className="flex items-center justify-center cursor-pointer">
+              <a className="text-2xl flex items-center justify-center">
+                <FontAwesomeIcon icon={faPaw} className="inline w-6 mr-2" />{" "}
+                MyWay
+              </a>
+            </li>
+          </Link>
+        </div>
+        <li
+          className="inline float-right"
+          onMouseEnter={() => setProfileMenu(!profileMenu)}
+          onMouseLeave={() => setProfileMenu(!profileMenu)}
+        >
           {user ? (
-            <>
-              {user.firstName} {user.lastName}
-            </>
+            user.profileImage ? (
+              <img
+                src={user.profileImage}
+                className="rounded-full h-10 w-10 flex items-center justify-center"
+              />
+            ) : (
+              <>{user.name}</>
+            )
           ) : (
             <>Guest</>
           )}
@@ -28,4 +50,6 @@ export default function TopNavbar() {
       </ul>
     </nav>
   );
-}
+});
+
+export default TopNavbar;

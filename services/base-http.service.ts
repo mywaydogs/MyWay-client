@@ -76,15 +76,17 @@ export default class BaseHttpService {
       ) {
         throw error.response.data;
       } else {
-        return this._handle401();
+        return this._handle401(error);
       }
     } else {
       throw error;
     }
   }
 
-  _handle401() {
-    Router.push("/login");
+  _handle401(error: AxiosError<APIErrorResponse>) {
+    this.get("/api/auth/refresh")
+      .then(() => axios.request(error.config))
+      .catch((e) => Router.push("/login"));
   }
 
   _getCommonOptions() {

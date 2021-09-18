@@ -11,4 +11,8 @@ export default class TrainersStore {
   async findAll(): Promise<TrainerDto[]> {
     return await this.trainersService.findAll();
   }
+
+  async findOne(id: number): Promise<TrainerDto> {
+    return await this.trainersService.findOne(id);
+  }
 }
