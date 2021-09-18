@@ -72,7 +72,8 @@ export default class BaseHttpService {
       if (
         statusCode !== 401 ||
         requestUrl?.endsWith("/api/auth/login") ||
-        requestUrl?.endsWith("/api/auth/register")
+        requestUrl?.endsWith("/api/auth/register") ||
+        requestUrl?.endsWith("/api/auth/refresh")
       ) {
         throw error.response.data;
       } else {
