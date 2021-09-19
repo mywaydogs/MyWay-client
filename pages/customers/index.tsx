@@ -1,11 +1,11 @@
+import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import AddCustomerForm from "../../components/customer/add-customer.form.component";
 import Spinner from "../../components/utils/spinner.component";
-import { CustomerDto } from "../../dto/customer.dto";
+import { CustomerDto } from "../../dto/customers/customer.dto";
 import { useStores } from "../../stores";
 
-export default function Customers() {
+const CustomersPage = observer(function CustomersPage() {
   const [customers, setCustomers] = useState<CustomerDto[] | null>(null);
 
   const { customersStore } = useStores();
@@ -22,7 +22,7 @@ export default function Customers() {
 
   return (
     <>
-      <AddCustomerForm />
+      <Link href="/customers/add">New Customer</Link>
 
       {/* TODO: Search by customer firstname, lastname, a customer's contact first name or last name, or a dog's name */}
 
@@ -41,4 +41,6 @@ export default function Customers() {
       </ul>
     </>
   );
-}
+});
+
+export default CustomersPage;

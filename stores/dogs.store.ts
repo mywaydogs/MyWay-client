@@ -1,5 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
+import { APICreateResult } from "../dto/api/api-create-result";
+import { CreateDogDto } from "../dto/dogs/create-dog.dto";
 import { DogDto } from "../dto/dogs/dog.dto";
 import { FindAllDogsDto } from "../dto/dogs/find-all-dogs.dto";
 import DogsService from "../services/dogs.service";
@@ -18,5 +20,9 @@ export default class DogsStore {
 
   async findOne(id: number): Promise<DogDto> {
     return await this.dogsService.findOne(id);
+  }
+
+  async create(createDogDto: CreateDogDto): Promise<APICreateResult> {
+    return await this.dogsService.create(createDogDto);
   }
 }

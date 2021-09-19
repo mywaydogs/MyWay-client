@@ -1,10 +1,10 @@
 import { DogMultipleChoiceDto } from "./dog-multiple-choice.dto";
 
-export interface DogDto {
-  id: number;
+export interface CreateDogDto {
   customerId: number;
   name: string;
-  birthDate: string;
+  ageYears: number;
+  ageMonths: number;
   breed: string;
   socialization: string;
   litterSeparation: string;

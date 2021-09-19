@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { CustomerDto } from "../../dto/customer.dto";
+import { CustomerDto } from "../../dto/customers/customer.dto";
 import AddDogForm from "../../components/dog/add-dog.form.component";
 import { DogDto } from "../../dto/dogs/dog.dto";
 import DogsTiles from "../../components/dog/dogs-tiles.component";
