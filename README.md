@@ -26,7 +26,10 @@ This photo is not up to date, but I think it demonstrates the purpose of this pr
 
 ![Dog profile page](doc/assets/dog-profile-page.png)
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Below is another photo of the user's profile page.
+
+![User's profile page](doc/assets/user-profile.png)
+
 
 ## Getting Started
 
