@@ -2,8 +2,9 @@ import { useStores } from "../stores";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { TrainerDto } from "../dto/trainer.dto";
+import { observer } from "mobx-react-lite";
 
-export default function HomePage() {
+const HomePage = observer(function HomePage() {
   const [trainers, setTrainers] = useState<TrainerDto[] | null>(null);
 
   const { trainersStore } = useStores();
@@ -52,4 +53,6 @@ export default function HomePage() {
       </div>
     </>
   );
-}
+});
+
+export default HomePage;

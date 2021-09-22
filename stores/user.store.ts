@@ -7,34 +7,36 @@ import { UpdateUserDto } from "../dto/user/update-user.dto";
 import AuthService from "../services/auth.service";
 
 export default class UserStore {
-  user: UserDto | null;
+  user: UserDto | null = null;
 
   constructor(
     private readonly rootStore: RootStore,
     private readonly authService: AuthService
   ) {
-    this.user = null;
-
     this.getUserProfile().then((user: UserDto) => {
-      this.user = user;
+      this.setUser(user);
     });
 
     makeAutoObservable(this);
   }
 
+  setUser(user: UserDto | null) {
+    this.user = user;
+  }
+
   async login(loginDto: LoginDto): Promise<void> {
-    this.user = await this.authService.login(loginDto);
+    this.setUser(await this.authService.login(loginDto));
   }
 
   async register(registerDto: RegisterDto): Promise<void> {
     await this.authService.register(registerDto);
     const { email, password } = registerDto;
     const loginDto: LoginDto = { email, password };
-    this.user = await this.authService.login(loginDto);
+    this.setUser(await this.authService.login(loginDto));
   }
 
   async logout(): Promise<void> {
-    this.user = null;
+    this.setUser(null);
     await this.authService.logout();
   }
 
@@ -44,6 +46,6 @@ export default class UserStore {
 
   async update(updateUserDto: UpdateUserDto): Promise<void> {
     await this.authService.update(updateUserDto);
-    Object.assign(this.user, updateUserDto);
+    this.setUser(Object.assign({}, this.user, updateUserDto));
   }
 }
