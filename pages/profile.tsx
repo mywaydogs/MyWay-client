@@ -177,7 +177,7 @@ const Profile = observer(function Profile() {
               <FormField
                 name="newPassword"
                 type="password"
-                placeholder="newPassword"
+                placeholder="New Password"
               />
               <ErrorMessage name="newPassword" />
 
