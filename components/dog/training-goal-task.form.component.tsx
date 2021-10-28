@@ -1,8 +1,10 @@
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import useSWR from "swr";
+import { useEffect, useState } from "react";
 import { TrainingGoalTaskDto } from "../../dto/training-goal-task.dto";
 import { convertDateForDatePicker } from "../../libraries/time.library";
+import { useStores } from "../../stores";
+import Spinner from "../utils/spinner.component";
 
 export default function TrainingGoalTaskForm({
   dogId,
@@ -13,16 +15,18 @@ export default function TrainingGoalTaskForm({
   goalId: number;
   taskId: number;
 }) {
-  const { data: taskData, error: taskError } = useSWR(
-    dogId && goalId && taskId
-      ? `/api/dogs/${dogId}/training-goals/${goalId}/tasks/${taskId}`
-      : null
-  );
+  const [task, setTask] = useState<TrainingGoalTaskDto | null>(null);
 
-  const task: TrainingGoalTaskDto = taskData?.data;
+  const { dogsStore } = useStores();
+
+  useEffect(() => {
+    dogsStore
+      .findOneTask(dogId, goalId, taskId)
+      .then((task: TrainingGoalTaskDto) => setTask(task));
+  }, [dogId, goalId, taskId]);
 
   if (!task) {
-    return <>Loading...</>;
+    return <Spinner />;
   }
   return (
     <Formik

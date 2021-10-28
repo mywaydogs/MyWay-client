@@ -17,6 +17,7 @@
     "color-scheme": "^1.0.1",
     "d3": "6.7",
     "formik": "^2.2.9",
+    "lodash": "^4.17.21",
     "mobx": "^6.3.3",
     "mobx-react-lite": "^3.2.1",
     "next": "^11.1.0",

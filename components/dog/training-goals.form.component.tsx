@@ -1,21 +1,30 @@
 import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import useSWR from "swr";
-import { DogDto } from "../../dto/dogs/dog.dto";
+import { useEffect, useState } from "react";
 import { TrainingGoalDto } from "../../dto/training-goal.dto";
+import { useStores } from "../../stores";
+import Spinner from "../utils/spinner.component";
 import AddTrainingGoalTaskForm from "./add-training-goal-task.form.component";
 import AddTrainingGoalForm from "./add-training-goal.form.component";
 import TrainingGoalTaskForm from "./training-goal-task.form.component";
 
 export default function TrainingGoalsForm({ dogId }: { dogId: number }) {
-  const { data: trainingGoalsData, error: trainingGoalsError } = useSWR(
-    dogId ? `/api/dogs/${dogId}/training-goals` : null
+  const [trainingGoals, setTrainingGoals] = useState<TrainingGoalDto[] | null>(
+    null
   );
 
-  const trainingGoals: TrainingGoalDto[] = trainingGoalsData?.data;
+  const { dogsStore } = useStores();
+
+  useEffect(() => {
+    dogsStore
+      .findAllTrainingGoals(dogId)
+      .then((trainingGoals: TrainingGoalDto[]) =>
+        setTrainingGoals(trainingGoals)
+      );
+  }, [dogId]);
 
   if (!trainingGoals) {
-    return <>Loading...</>;
+    return <Spinner />;
   }
 
   if (!trainingGoals.length) {
