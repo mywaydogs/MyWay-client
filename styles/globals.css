@@ -2,10 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
 textarea {
   resize: vertical;
 }
 
 h1 {
   @apply text-5xl;
+}
+
+body {
+  direction: rtl;
 }

@@ -9,13 +9,13 @@ import StatusMessage from "../utils/forms/status-message.component";
 import SubmitButton from "../utils/forms/submit-button.component";
 
 const RegisterSchema = Yup.object().shape({
-  name: Yup.string().required("Name is required."),
+  name: Yup.string().required("שדה השם הינו חובה."),
   email: Yup.string()
-    .email("The email address provided in invalid.")
-    .required("An email address is required."),
+    .email("כתובת הדוא״ל שהוזנה אינה תקינה.")
+    .required("שדה כתובת הדוא״ל הינו חובה."),
   password: Yup.string()
-    .min(8, "A password must be at least 8 characters.")
-    .required("A password is required."),
+    .min(8, "הסיסמה חייבת להכיל לפחות 8 תווים.")
+    .required("שדה הסיסמה הינו חובה."),
 });
 
 export default function RegisterForm() {
@@ -33,7 +33,7 @@ export default function RegisterForm() {
           .register(values)
           .then(() => {
             setStatus({
-              message: "You have registered successfully. Logging in ...",
+              message: "ההרשמה עברה בהצלחה. מבצע התחברות ...",
             });
             setTimeout(() => Router.push("/"), 2000);
           })
@@ -46,18 +46,18 @@ export default function RegisterForm() {
     >
       {({ isSubmitting, status }) => (
         <Form className="flex w-96 justify-center items-center flex-wrap">
-          <FormField name="name" type="text" placeholder="John Doe" />
+          <FormField name="name" type="text" placeholder="ישראל ישראלי" />
           <ErrorMessage name="name" />
 
-          <FormField name="email" type="email" placeholder="Email" />
+          <FormField name="email" type="email" placeholder="כתובת דוא״ל" />
           <ErrorMessage name="email" />
 
-          <FormField name="password" type="password" placeholder="Password" />
+          <FormField name="password" type="password" placeholder="סיסמה" />
           <ErrorMessage name="password" />
 
           <StatusMessage formStatus={status} />
 
-          <SubmitButton isSubmitting={isSubmitting} />
+          <SubmitButton isSubmitting={isSubmitting} value="התרשמה" />
         </Form>
       )}
     </Formik>

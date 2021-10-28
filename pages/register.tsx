@@ -6,15 +6,15 @@ export default function Register() {
     <div className="h-full flex items-center justify-center">
       <div>
         <div className="flex justify-center items-center">
-          <h1 className="text-4xl">Register</h1>
+          <h1 className="text-4xl">הרשמה</h1>
         </div>
         <div className="flex justify-center items-center">
           <RegisterForm />
         </div>
         <div className="flex justify-center my-4">
-          Already have an account?
+          כבר יש לך חשבון?
           <Link href="/login">
-            <a className="mx-1 font-medium underline">Login</a>
+            <a className="mx-1 font-medium underline">התחבר</a>
           </Link>
         </div>
       </div>

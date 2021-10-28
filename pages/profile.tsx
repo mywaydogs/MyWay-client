@@ -53,10 +53,10 @@ const Profile = observer(function Profile() {
 
   return (
     <>
-      <h2 className="text-3xl">Settings for {user.name}</h2>
+      <h2 className="text-3xl">הגדרות עבור {user.name}</h2>
 
       <div className="bg-gray-300 rounded-lg p-5 my-5">
-        <h3 className="text-2xl my-3">User</h3>
+        <h3 className="text-2xl my-3">הגדרות משתמש</h3>
         <Formik
           initialValues={userInitialValues}
           onSubmit={async (values, { setSubmitting, setStatus }) => {
@@ -72,11 +72,11 @@ const Profile = observer(function Profile() {
         >
           {({ isSubmitting, status, setStatus, setSubmitting }) => (
             <Form>
-              <FormLabel htmlFor="name" value="Name" />
-              <FormField name="name" type="text" placeholder="John Doe" />
+              <FormLabel htmlFor="name" value="שם מלא" />
+              <FormField name="name" type="text" placeholder="ישראל ישראלי" />
               <ErrorMessage name="name" />
 
-              <FormLabel htmlFor="email" value="Email Address" />
+              <FormLabel htmlFor="email" value="כתובת דוא״ל" />
               <FormField
                 name="email"
                 type="email"
@@ -84,16 +84,16 @@ const Profile = observer(function Profile() {
               />
               <ErrorMessage name="email" />
 
-              <FormLabel htmlFor="aboutMe" value="About me" />
+              <FormLabel htmlFor="aboutMe" value="אודות" />
               <FormField
                 name="aboutMe"
                 type="text"
-                placeholder="A short bio..."
+                placeholder="כמה משפטים על עצמי..."
                 as="textarea"
               />
               <ErrorMessage name="aboutMe" />
 
-              <FormLabel htmlFor="profileImage" value="Profile Image" />
+              <FormLabel htmlFor="profileImage" value="תמונת פרופיל" />
               <div className="flex items-center my-3">
                 {user.profileImage && (
                   <img
@@ -143,13 +143,13 @@ const Profile = observer(function Profile() {
 
               <StatusMessage formStatus={status} />
 
-              <SubmitButton isSubmitting={isSubmitting} value="Save Changes" />
+              <SubmitButton isSubmitting={isSubmitting} value="שמירת שינויים" />
             </Form>
           )}
         </Formik>
       </div>
       <div className="bg-gray-300 rounded-lg p-5 my-5">
-        <h3 className="text-2xl my-3">Account</h3>
+        <h3 className="text-2xl my-3">הגדרות חשבון</h3>
         <Formik
           initialValues={{ password: "", newPassword: "", confirmPassword: "" }}
           onSubmit={(values, { setStatus, setSubmitting }) => {
@@ -165,36 +165,29 @@ const Profile = observer(function Profile() {
         >
           {({ isSubmitting, status }) => (
             <Form>
-              <FormLabel htmlFor="password" value="Password" />
-              <FormField
-                name="password"
-                type="password"
-                placeholder="Password"
-              />
+              <FormLabel htmlFor="password" value="סיסמה" />
+              <FormField name="password" type="password" placeholder="סיסמה" />
               <ErrorMessage name="password" />
 
-              <FormLabel htmlFor="newPassword" value="New Password" />
+              <FormLabel htmlFor="newPassword" value="סיסמה חדשה" />
               <FormField
                 name="newPassword"
                 type="password"
-                placeholder="New Password"
+                placeholder="סיסמה חדשה"
               />
               <ErrorMessage name="newPassword" />
 
-              <FormLabel htmlFor="confirmPassword" value="Confirm Password" />
+              <FormLabel htmlFor="confirmPassword" value="אימות סיסמה" />
               <FormField
                 name="confirmPassword"
                 type="password"
-                placeholder="Confirm Password"
+                placeholder="אימות סיסמה"
               />
               <ErrorMessage name="confirmPassword" />
 
               <StatusMessage formStatus={status} />
 
-              <SubmitButton
-                isSubmitting={isSubmitting}
-                value="Change Password"
-              />
+              <SubmitButton isSubmitting={isSubmitting} value="שינוי סיסמה" />
             </Form>
           )}
         </Formik>

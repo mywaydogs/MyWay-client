@@ -2,7 +2,7 @@ import Spinner from "../spinner.component";
 
 export default function SubmitButton({
   isSubmitting,
-  value = "Submit",
+  value = "הגש טופס",
 }: {
   isSubmitting: boolean;
   value?: string;

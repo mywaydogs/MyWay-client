@@ -6,15 +6,15 @@ export default function Login() {
     <div className="h-full flex items-center justify-center">
       <div>
         <div className="flex justify-center items-center">
-          <h1 className="text-4xl">Login</h1>
+          <h1 className="text-4xl">התחברות</h1>
         </div>
         <div className="flex justify-center items-center">
           <LoginForm />
         </div>
         <div className="flex justify-center my-4">
-          Don't have an account yet?
+          אין לך חשבון?
           <Link href="/register">
-            <a className="mx-1 font-medium underline">Register</a>
+            <a className="mx-1 font-medium underline">הירשם</a>
           </Link>
         </div>
       </div>
