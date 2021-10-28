@@ -1,3 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 textarea {
   resize: vertical;
+}
+
+h1 {
+  @apply text-5xl;
 }
