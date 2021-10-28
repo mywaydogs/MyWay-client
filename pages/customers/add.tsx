@@ -3,6 +3,7 @@ import Router from "next/router";
 import { useState } from "react";
 import AddCustomerForm from "../../components/customer/add-customer.form.component";
 import AddDogForm from "../../components/dog/add-dog.form.component";
+import StepIndicator from "../../components/utils/forms/step-indicator.component";
 
 const AddCustomerPage = observer(function AddCustomerPage() {
   const [step, setStep] = useState<number>(0);
@@ -24,6 +25,9 @@ const AddCustomerPage = observer(function AddCustomerPage() {
         </>
       )}
       {step === 2 && customerId && <AddDogForm customerId={customerId} />}
+      <div className="flex justify-center items-center my-5">
+        <StepIndicator step={step} total={3} />
+      </div>
     </>
   );
 });
