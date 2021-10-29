@@ -24,7 +24,7 @@ export default function CustomerPage() {
         .then(() => dogsStore.findAll({ customerId }))
         .then((dogs: DogDto[]) => setDogs(dogs));
     }
-  }, [customerId]);
+  }, [customerId, customersStore, dogsStore]);
 
   if (!customer) {
     return <Spinner />;
@@ -37,7 +37,7 @@ export default function CustomerPage() {
       <AddDogForm customerId={customer.id} />
       {dogs == null && <Spinner />}
       {dogs && dogs.length === 0 && (
-        <>This customer doesn't have any dogs yet. Create one.</>
+        <>This customer doesn{"'"}t have any dogs yet. Create one.</>
       )}
       {dogs && <DogsTiles dogs={dogs} />}
     </>

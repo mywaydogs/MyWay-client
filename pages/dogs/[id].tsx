@@ -9,30 +9,6 @@ import { DogDto } from "../../dto/dogs/dog.dto";
 import { TrainingGoalDto } from "../../dto/training-goal.dto";
 import { useStores } from "../../stores";
 
-// const goals: GoalDto[] = [
-//   {
-//     title: "Sit",
-//     showOnChart: true,
-//     tasks: [
-//       { startTime: new Date("2021-08-08"), endTime: new Date("2021-08-09") },
-//     ],
-//   },
-//   {
-//     title: "Lie Down",
-//     showOnChart: true,
-//     tasks: [
-//       {
-//         startTime: new Date("2021-08-04"),
-//         endTime: new Date("2021-08-08 12:00:00"),
-//       },
-//       {
-//         startTime: new Date("2021-07-20"),
-//         endTime: new Date("2021-08-03 12:00:00"),
-//       },
-//     ],
-//   },
-// ];
-
 const DogPage = observer(function DogPage() {
   const [dog, setDog] = useState<DogDto | null>(null);
   const [trainingGoals, setTrainingGoals] = useState<TrainingGoalDto[] | null>(

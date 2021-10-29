@@ -10,9 +10,9 @@ const DogSelectField = observer(function DogSelectField({
 }) {
   return (
     <FormField name={name} as="select" {...props}>
-      <option value="Low">Low</option>
-      <option value="Medium">Medium</option>
-      <option value="High">High</option>
+      <option value="Low">נמוך/נמוכה</option>
+      <option value="Medium">בינוני/ת</option>
+      <option value="High">גבוה/ה</option>
     </FormField>
   );
 });

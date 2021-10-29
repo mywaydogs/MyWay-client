@@ -14,15 +14,15 @@ import * as Yup from "yup";
 import DogSelectField from "./dog-select-field.component";
 
 const addDogSchema = Yup.object().shape({
-  name: Yup.string().required("Name is required."),
+  name: Yup.string().required("שדה השם הינו חובה."),
   ageYears: Yup.number()
-    .typeError("Age in years must be a number.")
-    .positive("Age in years must be positive.")
-    .integer("Age in years must be an integer."),
+    .typeError("שדה גיל הכלב בשנים חייב להיות מספר.")
+    .positive("שדה גיל הכלב בשנים חייב להיות חיובי.")
+    .integer("שדה גיל הכלב בשנים חייב להיות מספר שלם."),
   ageMonths: Yup.number()
-    .typeError("Age in years must be a number.")
-    .positive("Age in months must be positive.")
-    .integer("Age in months must be an integer."),
+    .typeError("שדה גיל הכלב בחודשים חייב להיות מספר.")
+    .positive("שדה גיל הכלב בחודשים חייב להיות חיובי.")
+    .integer("שדה גיל הכלב בחודשים חייב להיות מספר שלם."),
   breed: Yup.string(),
   socialization: Yup.string(),
   litterSeparation: Yup.string(),
@@ -69,7 +69,7 @@ const AddDogForm = observer(function AddDogForm({
           .create(values)
           .then((res: APICreateResult) => {
             setStatus({
-              message: "Dog was created successfully.",
+              message: "הוספת הכלב בוצעה בהצלחה.",
             });
             setTimeout(() => Router.push(`/dogs/${res.id}`), 1500);
           })
@@ -81,101 +81,90 @@ const AddDogForm = observer(function AddDogForm({
       {({ isSubmitting, status }) => (
         <Form>
           <div className="bg-gray-300 rounded-lg p-5 my-5">
-            <h3 className="text-2xl my-3">Dog Attributes</h3>
-            <FormLabel htmlFor="name" value="Name" />
-            <FormField name="name" placeholder="Name" />
+            <h3 className="text-2xl my-3">תכונות הכלב</h3>
+            <FormLabel htmlFor="name" value="שם" />
+            <FormField name="name" placeholder="רקסי" />
             <ErrorMessage name="name" />
 
-            <FormLabel htmlFor="ageYears" value="Age (Years)" />
-            <FormField
-              name="ageYears"
-              type="number"
-              placeholder="Age (Years)"
-            />
+            <FormLabel htmlFor="ageYears" value="גיל (בשנים)" />
+            <FormField name="ageYears" type="number" placeholder="0" />
             <ErrorMessage name="ageYears" />
 
-            <FormLabel htmlFor="ageMonths" value="Age (Months)" />
-            <FormField
-              name="ageMonths"
-              type="number"
-              placeholder="Age (Months)"
-            />
+            <FormLabel htmlFor="ageMonths" value="גיל (בחודשים)" />
+            <FormField name="ageMonths" type="number" placeholder="0" />
             <ErrorMessage name="ageMonths" />
 
-            <FormLabel htmlFor="breed" value="Breed" />
-            <FormField name="breed" placeholder="Breed" />
+            <FormLabel htmlFor="breed" value="גזע" />
+            <FormField name="breed" placeholder="גזע" />
             <ErrorMessage name="breed" />
           </div>
 
           <div className="bg-gray-300 rounded-lg p-5 my-5">
-            <h3 className="text-2xl my-3">Puppyhood</h3>
-            <FormLabel htmlFor="socialization" value="Socialization" />
-            <FormField name="socialization" placeholder="Socialization" />
+            <h3 className="text-2xl my-3">תקופת גורות</h3>
+            <FormLabel htmlFor="socialization" value="חשיפה" />
+            <FormField name="socialization" placeholder="חשיפה" />
             <ErrorMessage name="socialization" />
 
-            <FormLabel htmlFor="litterSeparation" value="Litter Separation" />
-            <FormField
-              name="litterSeparation"
-              placeholder="Litter Separation"
-            />
+            <FormLabel htmlFor="litterSeparation" value="מספר חודשים בשגר" />
+            <FormField name="litterSeparation" placeholder="מספר חודשים בשגר" />
             <ErrorMessage name="litterSeparation" />
 
-            <FormLabel htmlFor="origin" value="Dog's Origin" />
-            <FormField name="origin" placeholder="Dog's Origin" />
+            <FormLabel htmlFor="origin" value="מקור הכלב" />
+            <FormField name="origin" placeholder="אימוץ מעמותה" />
             <ErrorMessage name="origin" />
           </div>
 
           <div className="bg-gray-300 rounded-lg p-5 my-5">
-            <h3 className="text-2xl my-3">Current Characterization</h3>
+            <h3 className="text-2xl my-3">אפיון נוכחי</h3>
 
-            <FormLabel htmlFor="healthIssues" value="Health Issues" />
+            <FormLabel htmlFor="healthIssues" value="בעיות בריאותיות" />
             <FormField
               name="healthIssues"
               as="textarea"
-              placeholder="Health Issues"
+              placeholder="אלרגיה לעוף, דלקת בדרכי השתן..."
             />
             <ErrorMessage name="healthIssues" />
 
-            <FormLabel htmlFor="foodDrive" value="Food Drive" />
-            <DogSelectField name="foodDrive" placeholder="Food Drive" />
+            <FormLabel htmlFor="foodDrive" value="מוטיבציה לאוכל" />
+            <DogSelectField name="foodDrive" placeholder="מוטיבציה לאוכל" />
             <ErrorMessage name="foodDrive" />
 
-            <FormLabel htmlFor="preyDrive" value="Prey Drive" />
-            <DogSelectField name="preyDrive" placeholder="Prey Drive" />
+            <FormLabel htmlFor="preyDrive" value="יצר ציד" />
+            <DogSelectField name="preyDrive" placeholder="יצר ציד" />
             <ErrorMessage name="preyDrive" />
 
-            <FormLabel htmlFor="currentSchedule" value="Current Schedule" />
+            <FormLabel htmlFor="currentSchedule" value="סדר יום נוכחי" />
             <FormField
               name="currentSchedule"
               as="textarea"
-              placeholder="Current Schedule"
+              placeholder="שני טיולים, אוכל זמין תמיד, פריקת אנרגיה מועטה..."
             />
             <ErrorMessage name="currentSchedule" />
 
-            <FormLabel htmlFor="energyLevel" value="Energy Level" />
-            <DogSelectField name="energyLevel" placeholder="Energy Level" />
+            <FormLabel htmlFor="energyLevel" value="רמת אנרגיה" />
+            <DogSelectField name="energyLevel" placeholder="רמת אנרגיה" />
             <ErrorMessage name="energyLevel" />
 
-            <FormLabel htmlFor="homeBehaviours" value="Home Behaviours" />
+            <FormLabel htmlFor="homeBehaviours" value="התנהגויות בבית" />
             <FormField
               name="homeBehaviours"
               as="textarea"
-              placeholder="Home Behaviours"
+              placeholder="נובח על אורחים..."
             />
             <ErrorMessage name="homeBehaviours" />
 
-            <FormLabel htmlFor="outsidebehaviours" value="Outside Behaviours" />
+            <FormLabel htmlFor="outsidebehaviours" value="התנהגויות בחוץ" />
             <FormField
               name="outsidebehaviours"
               as="textarea"
-              placeholder="Outside Behaviours"
+              placeholder="מתנפל על כלבים ועל עוברי אורח, מושך ברצועה..."
             />
             <ErrorMessage name="outsidebehaviours" />
           </div>
 
           <StatusMessage formStatus={status} />
 
-          <SubmitButton isSubmitting={isSubmitting} />
+          <SubmitButton isSubmitting={isSubmitting} value="הוספת כלב" />
         </Form>
       )}
     </Formik>

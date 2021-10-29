@@ -33,7 +33,6 @@ export default function DogProfile({ dog }: { dog: DogDto }) {
       <Formik
         initialValues={{
           name: dog.name,
-          color: dog.color,
           breed: dog.breed,
           age_years: calculateDiffInYears(new Date(), new Date(dog.birthDate)),
           age_months: calculateDiffInMonths(
@@ -62,16 +61,15 @@ export default function DogProfile({ dog }: { dog: DogDto }) {
             <Field name="name" type="text" placeholder="Name" />
             <ErrorMessage name="name" />
 
-            <Field name="color" type="text" placeholder="Color" />
-            <ErrorMessage name="color" />
             <Field name="breed" type="text" placeholder="Breed" />
             <ErrorMessage name="breed" />
+
             <Field name="age_years" type="number" placeholder="Age (years)" />
             <ErrorMessage name="age_years" />
 
             <Field name="age_months" type="number" placeholder="Age (months)" />
             <ErrorMessage name="age_months" />
-            
+
             {status && <>{status.message}</>}
 
             <SubmitButton isSubmitting={isSubmitting} />

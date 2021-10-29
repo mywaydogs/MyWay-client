@@ -12,15 +12,15 @@ import { APICreateResult } from "../../dto/api/api-create-result";
 import { APIErrorResponse } from "../../dto/api/api-error-response";
 
 const addCustomerSchema = Yup.object().shape({
-  firstName: Yup.string().required("First Name is required."),
-  lastName: Yup.string().required("Last name is required."),
+  firstName: Yup.string().required("שדה השם הפרטי הינו חובה."),
+  lastName: Yup.string().required("שדה שם המשפחה הינו חובה."),
   email: Yup.string()
-    .email("The email address provided is invalid.")
-    .required("Email address is required."),
+    .email("כתובת הדוא״ל שהוזנה אינה תקינה.")
+    .required("שדה כתובת הדוא״ל הינו חובה."),
   address: Yup.string(),
   phone: Yup.string()
-    .matches(/^\d+$/, "Phone must contain only digits")
-    .length(10, "Phone number must be exactly 10 digits"),
+    .matches(/^\d+$/, "מספר הפלאפון חייב להכיל אך ורק ספרות.")
+    .length(10, "מספר הפלאפון חייב להיות באורך של 10 תווים בדיוק."),
 });
 
 const AddCustomerForm = observer(function AddCustomerForm({
@@ -43,7 +43,7 @@ const AddCustomerForm = observer(function AddCustomerForm({
         customersStore
           .create(values)
           .then((res: APICreateResult) => {
-            setStatus({ message: "Customer was created successfully." });
+            setStatus({ message: "הלקוח נוסף בהצלחה." });
             onCustomerAdded(res.id);
           })
           .catch((e: APIErrorResponse) => setStatus({ error: e.message }))
@@ -53,29 +53,33 @@ const AddCustomerForm = observer(function AddCustomerForm({
     >
       {({ isSubmitting, status }) => (
         <Form>
-          <FormLabel htmlFor="firstName" value="First Name" />
-          <FormField name="firstName" type="text" placeholder="First Name" />
+          <FormLabel htmlFor="firstName" value="שם פרטי" />
+          <FormField name="firstName" type="text" placeholder="ישראל" />
           <ErrorMessage name="firstName" />
 
-          <FormLabel htmlFor="lastName" value="Last Name" />
-          <FormField name="lastName" type="text" placeholder="Last Name" />
+          <FormLabel htmlFor="lastName" value="שם משפחה" />
+          <FormField name="lastName" type="text" placeholder="ישראלי" />
           <ErrorMessage name="lastName" />
 
-          <FormLabel htmlFor="email" value="Email Address" />
-          <FormField name="email" placeholder="Email" type="email" />
+          <FormLabel htmlFor="email" value="כתובת דוא״ל" />
+          <FormField
+            name="email"
+            placeholder="example@gmail.com"
+            type="email"
+          />
           <ErrorMessage name="email" />
 
-          <FormLabel htmlFor="address" value="Address" />
-          <FormField name="address" type="text" placeholder="Address" />
+          <FormLabel htmlFor="address" value="כתובת" />
+          <FormField name="address" type="text" placeholder="כתובת" />
           <ErrorMessage name="address" />
 
-          <FormLabel htmlFor="phone" value="Phone Number" />
-          <FormField name="phone" type="text" placeholder="Phone Number" />
+          <FormLabel htmlFor="phone" value="מספר פלאפון" />
+          <FormField name="phone" type="text" placeholder="052-123-1234" />
           <ErrorMessage name="phone" />
 
           <StatusMessage formStatus={status} />
 
-          <SubmitButton isSubmitting={isSubmitting} />
+          <SubmitButton isSubmitting={isSubmitting} value="הוספת לקוח" />
         </Form>
       )}
     </Formik>

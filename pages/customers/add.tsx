@@ -4,27 +4,39 @@ import { useState } from "react";
 import AddCustomerForm from "../../components/customer/add-customer.form.component";
 import AddDogForm from "../../components/dog/add-dog.form.component";
 import StepIndicator from "../../components/utils/forms/step-indicator.component";
+import Spinner from "../../components/utils/spinner.component";
 
 const AddCustomerPage = observer(function AddCustomerPage() {
   const [step, setStep] = useState<number>(0);
   const [customerId, setCustomerId] = useState<null | number>(null);
 
   const onCustomerAdded = (customerId: number) => {
-    setStep(step + 1);
     setCustomerId(customerId);
+    setStep(step + 1);
   };
 
   return (
     <>
-      {step === 0 && <AddCustomerForm onCustomerAdded={onCustomerAdded} />}
-      {step === 1 && (
-        <>
-          Would you like to add a dog as well?
+      <div style={{ display: step == 0 ? "initial" : "none" }}>
+        <h1>הוספת לקוח</h1>
+        <AddCustomerForm onCustomerAdded={onCustomerAdded} />
+      </div>
+      <div
+        style={{ display: step == 1 ? "initial" : "none" }}
+        className="flex-col justify-center"
+      >
+        <div className="flex justify-center text-lg">
+          האם תרצה להוסיף גם כלב?
+        </div>
+        <div className="flex justify-around">
           <button onClick={() => setStep(step + 1)}>Yes</button>{" "}
           <button onClick={() => Router.push("/customers")}>No</button>
-        </>
-      )}
-      {step === 2 && customerId && <AddDogForm customerId={customerId} />}
+        </div>
+      </div>
+      <div style={{ display: step == 2 ? "initial" : "none" }}>
+        <h1>הוספת כלב</h1>
+        {customerId ? <AddDogForm customerId={customerId} /> : <Spinner />}
+      </div>
       <div className="flex justify-center items-center my-5">
         <StepIndicator step={step} total={3} />
       </div>
