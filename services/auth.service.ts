@@ -16,7 +16,9 @@ export default class AuthService extends BaseHttpService {
 
   async logout(): Promise<void> {
     await this.get("/api/auth/logout");
-    Router.push("/");
+    if (typeof window !== "undefined") {
+      Router.push("/");
+    }
   }
 
   async getUserProfile(): Promise<UserDto> {

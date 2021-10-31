@@ -7,7 +7,6 @@ import { APIResponse } from "../dto/api/api-response";
 
 export default class BaseHttpService {
   BASE_URL = process.env.BASE_URL || "http://localhost:3000";
-  //   _accessToken: string = null;
 
   async get<T = any>(
     endpoint: string,
@@ -87,36 +86,14 @@ export default class BaseHttpService {
   _handle401(error: AxiosError<APIErrorResponse>) {
     this.get("/api/auth/refresh")
       .then(() => axios.request(error.config))
-      .catch((e) => Router.push("/login"));
+      .catch((e) => {
+        if (typeof window !== "undefined") {
+          Router.push("/login");
+        }
+      });
   }
 
   _getCommonOptions() {
-    // const token = this.loadToken();
-
-    // return {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // };
     return {};
   }
-
-  //   get accessToken() {
-  //     return this._accessToken ? this._accessToken : this.loadToken();
-  //   }
-
-  //   saveToken(accessToken : string) {
-  //     this._accessToken = accessToken;
-  //     return localStorage.setItem("accessToken", accessToken);
-  //   }
-
-  //   loadToken() {
-  //     const token : string = localStorage.getItem("accessToken") as string;
-  //     this._accessToken = token;
-  //     return token;
-  //   }
-
-  //   removeToken() {
-  //     localStorage.removeItem("accessToken");
-  //   }
 }
