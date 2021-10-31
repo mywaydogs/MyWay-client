@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
+import { APIErrorResponse } from "../dto/api/api-error-response";
 import { LoginDto } from "../dto/auth/login.dto";
 import { RegisterDto } from "../dto/auth/register.dto";
 import { UserDto } from "../dto/auth/user.dto";
@@ -13,9 +14,13 @@ export default class UserStore {
     private readonly rootStore: RootStore,
     private readonly authService: AuthService
   ) {
-    this.getUserProfile().then((user: UserDto) => {
-      this.setUser(user);
-    });
+    this.getUserProfile()
+      .then((user: UserDto) => {
+        this.setUser(user);
+      })
+      .catch((e: APIErrorResponse) => {
+        console.log(e);
+      });
 
     makeAutoObservable(this);
   }
