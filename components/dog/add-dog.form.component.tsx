@@ -1,6 +1,7 @@
 import { Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
-import Router from "next/router";
+import { useRouter } from "next/router";
+import * as Yup from "yup";
 import { APICreateResult } from "../../dto/api/api-create-result";
 import { APIErrorResponse } from "../../dto/api/api-error-response";
 import { CreateDogDto } from "../../dto/dogs/create-dog.dto";
@@ -10,7 +11,6 @@ import FormField from "../utils/forms/form-field.component";
 import FormLabel from "../utils/forms/form-label.component";
 import StatusMessage from "../utils/forms/status-message.component";
 import SubmitButton from "../utils/forms/submit-button.component";
-import * as Yup from "yup";
 import DogSelectField from "./dog-select-field.component";
 
 const addDogSchema = Yup.object().shape({
@@ -42,6 +42,7 @@ const AddDogForm = observer(function AddDogForm({
   customerId: number;
 }) {
   const { dogsStore } = useStores();
+  const router = useRouter();
 
   const initialValues: CreateDogDto = {
     customerId,
@@ -71,7 +72,7 @@ const AddDogForm = observer(function AddDogForm({
             setStatus({
               message: "הוספת הכלב בוצעה בהצלחה.",
             });
-            setTimeout(() => Router.push(`/dogs/${res.id}`), 1500);
+            setTimeout(() => router.push(`/dogs/${res.id}`), 1500);
           })
           .catch((e: APIErrorResponse) => setStatus({ error: e.message }))
           .finally(() => setSubmitting(false));

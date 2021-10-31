@@ -23,7 +23,7 @@ export default function TrainingGoalTaskForm({
     dogsStore
       .findOneTask(dogId, goalId, taskId)
       .then((task: TrainingGoalTaskDto) => setTask(task));
-  }, [dogId, goalId, taskId]);
+  }, [dogId, goalId, taskId, dogsStore]);
 
   if (!task) {
     return <Spinner />;

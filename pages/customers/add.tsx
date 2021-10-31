@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { useState } from "react";
 import AddCustomerForm from "../../components/customer/add-customer.form.component";
 import AddDogForm from "../../components/dog/add-dog.form.component";
@@ -9,6 +9,8 @@ import Spinner from "../../components/utils/spinner.component";
 const AddCustomerPage = observer(function AddCustomerPage() {
   const [step, setStep] = useState<number>(0);
   const [customerId, setCustomerId] = useState<null | number>(null);
+
+  const router = useRouter();
 
   const onCustomerAdded = (customerId: number) => {
     setCustomerId(customerId);
@@ -30,7 +32,7 @@ const AddCustomerPage = observer(function AddCustomerPage() {
         </div>
         <div className="flex justify-around">
           <button onClick={() => setStep(step + 1)}>Yes</button>{" "}
-          <button onClick={() => Router.push("/customers")}>No</button>
+          <button onClick={() => router.push("/customers")}>No</button>
         </div>
       </div>
       <div style={{ display: step == 2 ? "initial" : "none" }}>

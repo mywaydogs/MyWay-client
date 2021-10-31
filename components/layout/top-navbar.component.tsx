@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import { useStores } from "../../stores";
 import ProfileMenu from "./profile-menu.component";
+import Image from "next/image";
 
 const TopNavbar = observer(function TopNavBar() {
   const [profileMenu, setProfileMenu] = useState(false);
@@ -33,9 +34,12 @@ const TopNavbar = observer(function TopNavBar() {
       >
         {user ? (
           user.profileImage ? (
-            <img
+            <Image
               src={user.profileImage}
-              className="rounded-full h-10 w-10 flex items-center justify-center"
+              width={40}
+              height={40}
+              alt="Small round profile image of the user"
+              className="rounded-full"
             />
           ) : (
             <>{user.name}</>

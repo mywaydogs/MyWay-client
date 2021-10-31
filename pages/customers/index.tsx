@@ -14,7 +14,7 @@ const CustomersPage = observer(function CustomersPage() {
     customersStore
       .findAll()
       .then((customers: CustomerDto[]) => setCustomers(customers));
-  }, []);
+  }, [customersStore]);
 
   if (customers == null) {
     return <Spinner />;

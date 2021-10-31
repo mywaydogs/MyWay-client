@@ -21,7 +21,7 @@ export default function TrainingGoalsForm({ dogId }: { dogId: number }) {
       .then((trainingGoals: TrainingGoalDto[]) =>
         setTrainingGoals(trainingGoals)
       );
-  }, [dogId]);
+  }, [dogId, dogsStore]);
 
   if (!trainingGoals) {
     return <Spinner />;

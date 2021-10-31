@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import * as Yup from "yup";
 import { APIErrorResponse } from "../../dto/api/api-error-response";
 import { useStores } from "../../stores";
@@ -19,6 +19,7 @@ const RegisterSchema = Yup.object().shape({
 });
 
 export default function RegisterForm() {
+  const router = useRouter();
   const { userStore } = useStores();
 
   return (
@@ -35,7 +36,7 @@ export default function RegisterForm() {
             setStatus({
               message: "ההרשמה עברה בהצלחה. מבצע התחברות ...",
             });
-            setTimeout(() => Router.push("/"), 2000);
+            setTimeout(() => router.push("/"), 2000);
           })
           .catch((e: APIErrorResponse) => {
             setStatus({ error: e.message });

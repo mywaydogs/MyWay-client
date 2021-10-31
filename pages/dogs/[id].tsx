@@ -30,7 +30,7 @@ const DogPage = observer(function DogPage() {
           setTrainingGoals(trainingGoals)
         );
     }
-  }, []);
+  }, [dogId, dogsStore]);
 
   if (dog == null) {
     return <Spinner />;

@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { APIErrorResponse } from "../../dto/api/api-error-response";
 import { useStores } from "../../stores";
@@ -19,6 +19,7 @@ const LoginSchema = Yup.object().shape({
 });
 
 const LoginForm = observer(function LoginForm() {
+  const router = useRouter();
   const { userStore } = useStores();
 
   return (
@@ -32,7 +33,7 @@ const LoginForm = observer(function LoginForm() {
           .login(values)
           .then(() => {
             setStatus({ message: "ההתחברות עברה בהצלחה." });
-            setTimeout(() => Router.push("/"), 2000);
+            setTimeout(() => router.push("/"), 2000);
           })
           .catch((e: APIErrorResponse) => {
             setStatus({ error: e.message });

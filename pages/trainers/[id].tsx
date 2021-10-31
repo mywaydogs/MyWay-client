@@ -18,7 +18,7 @@ export default function TrainerPage() {
         .findOne(trainerId)
         .then((trainer: TrainerDto) => setTrainer(trainer));
     }
-  }, [trainerId]);
+  }, [trainerId, trainersStore]);
 
   // const { data: trainerData, error: trainerError } = useSWR(
   //   trainerId ? `/api/trainers/${trainerId}` : null

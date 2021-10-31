@@ -10,6 +10,7 @@ import Spinner from "../components/utils/spinner.component";
 import { APIErrorResponse } from "../dto/api/api-error-response";
 import { FileTooLargeError, readFileAsBase64 } from "../libraries/file.library";
 import { useStores } from "../stores";
+import Image from "next/image";
 
 const userValidationSchema = Yup.object().shape({
   name: Yup.string().required("Name is required."),
@@ -63,7 +64,7 @@ const Profile = observer(function Profile() {
             userStore
               .update({ ...values, id: user.id })
               .then(() => {
-                setStatus({ message: "Your profile was updated succesfully." });
+                setStatus({ message: "הפרופיל שונה בהצלחה." });
               })
               .catch((e: APIErrorResponse) => setStatus({ error: e.message }))
               .finally(() => setSubmitting(false));
@@ -96,9 +97,12 @@ const Profile = observer(function Profile() {
               <FormLabel htmlFor="profileImage" value="תמונת פרופיל" />
               <div className="flex items-center my-3">
                 {user.profileImage && (
-                  <img
+                  <Image
                     src={user.profileImage}
-                    className="rounded-full w-20 h-20 flex items-center justify-center mr-5"
+                    width={70}
+                    height={70}
+                    alt={"Small round profile image of the user"}
+                    className="rounded-full"
                   />
                 )}
                 <input

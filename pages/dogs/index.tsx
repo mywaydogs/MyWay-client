@@ -10,7 +10,7 @@ export default function DogsPage() {
 
   useEffect(() => {
     dogsStore.findAll({}).then((dogs: DogDto[]) => setDogs(dogs));
-  }, []);
+  }, [dogsStore]);
 
   if (dogs == null) {
     return <Spinner />;
