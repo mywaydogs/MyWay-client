@@ -2,11 +2,13 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import Router from "next/router";
 import { APIErrorResponse } from "../dto/api/api-error-response";
 import { APIResponse } from "../dto/api/api-response";
+import getConfig from "next/config";
 
 // Taken from https://github.com/arielweinberger/task-management-frontend/blob/master/src/services/base-http.service.js
 
+const { publicRuntimeConfig } = getConfig();
 export default class BaseHttpService {
-  BASE_URL = process.env.BASE_URL || "http://localhost:3000";
+  BASE_URL = publicRuntimeConfig.baseURL;
 
   async get<T = any>(
     endpoint: string,
