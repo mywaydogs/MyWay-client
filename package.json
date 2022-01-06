@@ -24,10 +24,11 @@
     "query-string": "^7.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-reserver": "^1.4.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "@types/d3": "^7.0.0",
+    "@types/d3": "^7.1.0",
     "@types/react": "^17.0.14",
     "@types/styled-components": "^5.1.11",
     "autoprefixer": "^10.3.4",

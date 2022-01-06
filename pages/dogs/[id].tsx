@@ -2,8 +2,8 @@ import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import DogProfile from "../../components/dog/dog-profile.component";
-import DogTrainingGoalsTimelineChart from "../../components/dog/dog-training-goals-timeline-chart.component";
 import TrainingGoalsForm from "../../components/dog/training-goals.form.component";
+import TrainingsChart from "../../components/trainings-chart/trainings-chart.component";
 import Spinner from "../../components/utils/spinner.component";
 import { DogDto } from "../../dto/dogs/dog.dto";
 import { TrainingGoalDto } from "../../dto/training-goal.dto";
@@ -40,11 +40,9 @@ const DogPage = observer(function DogPage() {
     <>
       <h1>{dog.name}</h1>
       {!dog ? <Spinner /> : <DogProfile dog={dog} />}
-      {dogId && <TrainingGoalsForm dogId={dogId} />}
-      <div style={{ width: "900px" }}>
-        {trainingGoals && (
-          <DogTrainingGoalsTimelineChart trainingGoals={trainingGoals} />
-        )}
+      {/* {dogId && <TrainingGoalsForm dogId={dogId} />} */}
+      <div className="w-3/4 h-72">
+        {trainingGoals && <TrainingsChart trainingGoals={trainingGoals} />}
       </div>
     </>
   );

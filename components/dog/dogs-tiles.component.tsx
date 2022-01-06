@@ -7,7 +7,7 @@ export default function DogsTiles({ dogs }: { dogs: DogDto[] }) {
   }
 
   return (
-    <div className="flex justify-around">
+    <div className="flex flex-wrap justify-around">
       {dogs.map((dog) => (
         <Link href={`/dogs/${dog.id}`} key={dog.id}>
           <a>
@@ -22,7 +22,7 @@ export default function DogsTiles({ dogs }: { dogs: DogDto[] }) {
                 <div className="space-y-0.5">
                   <p className="text-lg text-black font-semibold">{dog.name}</p>
                   <p className="text-gray-500 font-medium">
-                    Owned by {"<"}Customer name{">"}
+                    בבעלות {dog.customer.firstName} {dog.customer.lastName}
                   </p>
                 </div>
                 <button className="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">

@@ -1,8 +1,8 @@
+import { CustomerDto } from "../customers/customer.dto";
 import { DogMultipleChoiceDto } from "./dog-multiple-choice.dto";
 
 export interface DogDto {
   id: number;
-  customerId: number;
   name: string;
   birthDate: string;
   breed: string;
@@ -16,4 +16,5 @@ export interface DogDto {
   energyLevel: DogMultipleChoiceDto;
   homeBehaviours: string;
   outsideBehaviours: string;
+  customer: CustomerDto;
 }
