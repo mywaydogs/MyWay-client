@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { DogDto } from "../../dto/dogs/dog.dto";
 
 export default function DogsTiles({ dogs }: { dogs: DogDto[] }) {
@@ -17,7 +18,15 @@ export default function DogsTiles({ dogs }: { dogs: DogDto[] }) {
                     src="/img/erin-lindford.jpg"
                     alt="Woman's Face"
                   /> */}
-              <span className="block mx-auto h-24 w-24 rounded-full sm:mx-0 sm:flex-shrink-0 bg-black" />
+              <div className="block mx-auto h-24 w-24 rounded-full sm:mx-0 sm:flex-shrink-0">
+                <Image
+                  src="/dog-pic-filler.png"
+                  alt="An illustration of a Pug"
+                  layout="responsive"
+                  width={50}
+                  height={50}
+                />
+              </div>
               <div className="text-center space-y-2 sm:text-left">
                 <div className="space-y-0.5">
                   <p className="text-lg text-black font-semibold">{dog.name}</p>

@@ -8,7 +8,7 @@ import StatusMessage from "../components/utils/forms/status-message.component";
 import SubmitButton from "../components/utils/forms/submit-button.component";
 import Spinner from "../components/utils/spinner.component";
 import { APIErrorResponse } from "../dto/api/api-error-response";
-import { FileTooLargeError, readFileAsBase64 } from "../libraries/file.library";
+import { FileTooLargeError, readFileAsBase64 } from "../lib/file.library";
 import { useStores } from "../stores";
 import Image from "next/image";
 
