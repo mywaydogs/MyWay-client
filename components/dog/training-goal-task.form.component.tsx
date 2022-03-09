@@ -2,7 +2,7 @@ import axios from "axios";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { TrainingGoalTaskDto } from "../../dto/training-goal-task.dto";
-import { convertDateForDatePicker } from "../../libraries/time.library";
+import { convertDateForDatePicker } from "../../lib/time.library";
 import { useStores } from "../../stores";
 import Spinner from "../utils/spinner.component";
 
@@ -32,8 +32,8 @@ export default function TrainingGoalTaskForm({
     <Formik
       initialValues={{
         description: task.description,
-        startDate: convertDateForDatePicker(new Date(task.startDate)),
-        endDate: convertDateForDatePicker(new Date(task.endDate)),
+        startDate: convertDateForDatePicker(new Date(task.startingTraining)),
+        endDate: convertDateForDatePicker(new Date(task.endingTraining)),
       }}
       onSubmit={(values, actions) => {
         axios.put(

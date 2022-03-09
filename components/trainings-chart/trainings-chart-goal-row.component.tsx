@@ -49,6 +49,7 @@ export default function TrainingsChartGoalRow({
       <svg>
         {goal.tasks.map((task, taskIdx) => (
           <svg
+            key={task.id}
             x={`${calcXOffsetOfTaskInPercentage(task)}%`}
             y={`${(90 / totalNumberOfTasks) * (goal.tasksSoFar + taskIdx)}%`}
             width={`${calcWidthOfTaskInPercentage(task)}%`}

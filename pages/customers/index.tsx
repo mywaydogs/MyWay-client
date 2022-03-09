@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Button from "../../components/buttons/button.component";
 import Spinner from "../../components/utils/spinner.component";
 import { CustomerDto } from "../../dto/customers/customer.dto";
 import { useStores } from "../../stores";
@@ -22,8 +23,18 @@ const CustomersPage = observer(function CustomersPage() {
 
   return (
     <>
-      <Link href="/customers/add">New Customer</Link>
+      <h1>הלקוחות שלי</h1>
 
+      <div>
+        <input
+          type="text"
+          className="w-4/6 rounded-full"
+          placeholder="הזן שם לקוח או שם כלב"
+        />
+        <Button>
+          <Link href="/customers/add">הוספת לקוח</Link>
+        </Button>
+      </div>
       {/* TODO: Search by customer firstname, lastname, a customer's contact first name or last name, or a dog's name */}
 
       {customers.length === 0 && <>You have no customers yet. Create one.</>}

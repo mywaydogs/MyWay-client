@@ -4,7 +4,7 @@ import { DogDto } from "../../dto/dogs/dog.dto";
 import {
   calculateDiffInMonths,
   calculateDiffInYears,
-} from "../../libraries/time.library";
+} from "../../lib/time.library";
 import ErrorMessage from "../utils/forms/error-message.component";
 import Spinner from "../utils/spinner.component";
 import * as Yup from "yup";

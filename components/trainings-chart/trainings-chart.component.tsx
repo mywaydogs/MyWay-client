@@ -125,6 +125,7 @@ export default function TrainingsChart({
       <svg>
         {chartGoals.map((goal, idx) => (
           <TrainingsChartGoalRow
+            key={goal.id}
             idx={idx}
             total={chartGoals.length}
             goal={goal}
