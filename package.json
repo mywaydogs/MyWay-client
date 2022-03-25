@@ -14,8 +14,6 @@
     "@fortawesome/react-fontawesome": "^0.1.15",
     "@tailwindcss/forms": "^0.3.3",
     "axios": "^0.21.1",
-    "color-scheme": "^1.0.1",
-    "d3": "6.7",
     "formik": "^2.2.9",
     "lodash": "^4.17.21",
     "mobx": "^6.3.3",
@@ -24,11 +22,9 @@
     "query-string": "^7.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-reserver": "^1.4.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "@types/d3": "^7.1.0",
     "@types/react": "^17.0.14",
     "@types/styled-components": "^5.1.11",
     "autoprefixer": "^10.3.4",
