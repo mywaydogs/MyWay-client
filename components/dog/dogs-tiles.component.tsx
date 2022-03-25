@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { DogDto } from "../../dto/dogs/dog.dto";
+import {DogDto} from "../../dto/dogs/dog.dto";
 
 export default function DogsTiles({ dogs }: { dogs: DogDto[] }) {
   if (dogs.length === 0) {
@@ -13,11 +13,6 @@ export default function DogsTiles({ dogs }: { dogs: DogDto[] }) {
         <Link href={`/dogs/${dog.id}`} key={dog.id}>
           <a>
             <div className="py-8 px-8 max-w-sm bg-white rounded-xl shadow-md space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6 m-5 cursor-pointer">
-              {/* <img
-                    className="block mx-auto h-24 rounded-full sm:mx-0 sm:flex-shrink-0"
-                    src="/img/erin-lindford.jpg"
-                    alt="Woman's Face"
-                  /> */}
               <div className="block mx-auto h-24 w-24 rounded-full sm:mx-0 sm:flex-shrink-0">
                 <Image
                   src="/dog-pic-filler.png"
